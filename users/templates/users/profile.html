@@ -1,0 +1,45 @@
+{% extends 'matchmaker/base.html' %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <title>Matchmaker</title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block body %}
+    <div class="content-section">
+        <div class="profile-top shadow p-4 mt-5 bg-white rounded" style="width:48rem; margin:auto">
+            <div class="media d-inline-flex justify-content-around" style="width:100%">
+                <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" height="150" width="150"
+                    style="object-fit: cover;">
+                <div class="col align-self-center">
+                    <h2 class="account-heading text-primary">{{ user.first_name }}</h2>
+                    <h2 class="account-heading">{{ user.last_name }}</h2>
+                </div>
+                <div class="col text-center align-self-center">
+                    <h4 class="">Views: <span>124</span></h4>
+                    <h4 class="">Hotness: <span>12</span></h4>
+                </div>
+            </div>
+        </div>
+        <div class="profile-top shadow p-4 mt-3 mb-5 bg-white rounded" style="width:48rem; margin:auto">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class='form-group'>
+                    <h3 class="mb-4">Profile Info</h3>
+                    {{ u_form.as_p }}
+                    {{ p_form.as_p }}
+                </fieldset>
+                <div class="text-center">
+                    <input id="updateButton" type="submit" class="btn btn-primary " value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

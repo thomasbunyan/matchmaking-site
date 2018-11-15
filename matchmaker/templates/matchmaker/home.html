@@ -1,0 +1,63 @@
+{% extends 'matchmaker/base.html' %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% block head %}
+  <title>MatchMaker</title>
+  {% endblock %}
+</head>
+
+<body>
+  {% block body %}
+  {% if user.is_authenticated %}
+
+  {% else %}
+  <div class="jumbotron text-center">
+    <div class="container">
+      <h1>Welcome</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed harum culpa nemo iusto esse possimus alias
+        nesciunt veniam, voluptatum porro consequuntur, quod quae quam aspernatur et officiis iste provident. Sint!</p>
+      <a href="{% url 'register' %}" class="btn btn-primary">Sign up</a>
+      <p><small class="text-center"><a href="{% url 'login' %}" class="text-muted">Already have an account? Sign in.</a></small></p>
+    </div>
+  </div>
+  <div class="home-container">
+    <div class="row text-center" style="width: 55vw; margin: auto">
+      <div class="col">
+        <div class="card shadow p-3 bg-white rounded">
+          <div class="card-body">
+            <h4 class="card-title">Get started</h4>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the card's content.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow p-3 bg-white rounded">
+          <div class="card-body">
+            <h4 class="card-title">Get started</h4>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the card's content.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow p-3 bg-white rounded">
+          <div class="card-body">
+            <h4 class="card-title">Get started</h4>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the card's content.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endblock %}
+</body>
+
+</html>

@@ -26,7 +26,7 @@ function initLogin() {
             return;
         }
 
-        const url = "http://localhost:8000/api/login/";
+        const url = "http://127.0.0.1:8000/api/login/";
         $.ajax({
             url: url,
             type: "POST",
@@ -37,9 +37,9 @@ function initLogin() {
                     if (data.success) {
                         const next = getUrlParameter("next");
                         if (next !== undefined) {
-                            window.location.replace("http://localhost:8000" + next);
+                            window.location.replace("http://127.0.0.1:8000" + next);
                         } else {
-                            window.location.replace("http://localhost:8000/" + data.redirect);
+                            window.location.replace("http://127.0.0.1:8000/" + data.redirect);
                         }
                     } else {
                         console.log("bad login")
@@ -71,7 +71,7 @@ function initRegister() {
         // Need a username, use the email.
         form.username = form.email;
 
-        const url = "http://localhost:8000/api/register/";
+        const url = "http://127.0.0.1:8000/api/register/";
         $.ajax({
             url: url,
             type: "POST",
@@ -80,7 +80,7 @@ function initRegister() {
             success: (data, status) => {
                 if (status) {
                     if (data.success) {
-                        window.location.replace("http://localhost:8000/" + data.redirect);
+                        window.location.replace("http://127.0.0.1:8000/" + data.redirect);
                     } else {
                         validateForm(data.errors);
                     }
@@ -107,11 +107,11 @@ function initDiscover() {
     let profiles = [];
 
     // GET data.
-    const url = "http://localhost:8000/api/profiles/";
+    const url = "http://127.0.0.1:8000/api/profiles/";
     $.ajax({
         url: url,
         type: "GET",
-        dataType: "json",
+        data: "json",
         success: (data, status) => {
             if (status) {
                 profiles = data.map((e) => {
@@ -128,10 +128,28 @@ function initDiscover() {
         $('#' + id).modal();
     });
     // Click the hot button.
+    //The unlick just needs to do Delete call and supply userid
     $('.profile-hot').click((e) => {
         e.stopImmediatePropagation();
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
         console.log("Make profile", id, "hot.");
+        let form = {};
+        form.username = id;
+        form.csrfmiddlewaretoken = getCookie("csrftoken");
+        //Making hot cal call
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/heat/",
+            type: "POST",
+            data: form,
+            dataType: "json",
+            success: (data, status) => {
+                if (status) {
+                    console.log("Obtained profiles", profiles)
+                }
+            }
+        });
+
+        
     });
 
 

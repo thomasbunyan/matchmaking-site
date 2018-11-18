@@ -28,6 +28,13 @@ class Profile(models.Model):
     hobbies = models.ManyToManyField(
         Hobby, blank=True, related_name='categories')
     adjectives = models.TextField(default="adjective", max_length=400)
+    views = models.IntegerField(default=0)
+    heat = models.ManyToManyField(
+        related_name='user_heat',
+        to='self'   ,
+        blank=True,
+        symmetrical=False
+    )
 
     def __str__(self):
         return self.user.username + "'s profile"

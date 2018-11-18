@@ -10,6 +10,9 @@ from .models import Profile, Hobby
 
 @login_required
 def profile(request):
+
+
+
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(
@@ -23,9 +26,16 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+
+    #Just increasing view counter on viewing profile here, need to do it for ajax aswell
+    request.user.profile.views = request.user.profile.views+1
+    request.user.save()
+
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'views' : request.user.profile.views,
+        'heat'  :request.user.profile.user_heat.count()
     }
 
     return render(request, 'users/profile.html', context)
@@ -79,5 +89,28 @@ def apiRegister(request):
         else:
             print("not valid")
             return JsonResponse({"success": False, "errors": form.errors})
+    else:
+        return JsonResponse({"success": False})
+
+@login_required
+def apiProfileIDHeat(request):
+    if request.method == "POST":
+        #request.PUT = QueryDict(request.body)
+        if(request.POST.get("username") != None):
+            username = request.POST['username']
+            user = Profile.objects.get(user=username)
+            request.user.profile.heat.add(user)
+            request.user.profile.save()
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"success": False})
+
+    elif request.method == "DELETE":
+        if(request.POST.get("username") != None):
+            username = request.GET['username']
+            user = Profile.objects.get(user=username)
+            request.user.profile.heat.remove(user)
+        else:
+            return JsonResponse({"success": False})
     else:
         return JsonResponse({"success": False})

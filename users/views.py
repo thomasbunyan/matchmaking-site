@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, QueryDict
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
@@ -58,6 +58,10 @@ def apiLogin(request):
 def apiProfile(request):
     if request.method == "GET":
         res = Profile.objects.filter(user=request.user.id)
+        #Increase counter every time you make call to get individual profile
+        res.views = res.views+1
+        res.save()
+
         res = serializers.serialize('json', res)
         return HttpResponse(res, content_type="application/json")
 
@@ -148,10 +152,12 @@ def apiProfileIDHeat(request):
             return JsonResponse({"success": False})
 
     elif request.method == "DELETE":
-        if(request.POST.get("username") != None):
-            username = request.GET['username']
+        delete = QueryDict(request.body)
+        if(delete.get("username") != None):
+            username = delete['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.remove(profile)
+            return JsonResponse({"success": True})
         else:
             return JsonResponse({"success": False})
     else:

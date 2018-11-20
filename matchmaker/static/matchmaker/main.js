@@ -189,6 +189,9 @@ function initDiscover() {
         $.ajax({
             url: "http://127.0.0.1:8000/api/heat/",
             type: "DELETE",
+            headers: {
+                'X-CSRFToken': getCookie("csrftoken"),
+            },
             data: form,
             dataType: "json",
             success: (data, status) => {

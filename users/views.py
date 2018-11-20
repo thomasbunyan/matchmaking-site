@@ -4,8 +4,11 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
+
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Hobby
+
+import json
 
 
 @login_required
@@ -60,12 +63,51 @@ def apiProfile(request):
 
     return JsonResponse({"success": False})
 
-
+@login_required
 def apiProfiles(request):
     if request.method == "GET":
         res = Profile.objects.exclude(user=request.user.id)
-        res = serializers.serialize('json', res)
-        return HttpResponse(res, content_type="application/json")
+        #Manually Making Json File
+        #res = serializers.serialize('json', res)
+
+        #Hashmap for all the ones that you have favourited
+        favorited = {}
+        for user in request.user.profile.heat.all():
+            favorited[user.id] = True
+ 
+        jsonData = []
+        
+        for profile in res:
+            
+            jsonProduct = { 'id' : profile.user.id,
+                            'image': '/media/' + str(profile.image),
+                            'firstname': profile.user.first_name,
+                            'lastname' : profile.user.last_name,
+                            'dob' : profile.dob,
+                            'gender' : profile.gender,
+                            'location': profile.location,
+                            'description' : profile.description,
+                            'adjectives' : profile.adjectives,
+                            'views' : str(profile.views),
+                            
+            }
+
+            hobbies = []
+            for hobby in profile.hobbies.all():
+                hobbies.append(hobby.name)
+            
+            jsonProduct['hobbies'] = hobbies
+
+            if(profile.user.id in favorited):
+                jsonProduct['heat'] = True
+            else:
+                jsonProduct['heat'] = False
+
+            jsonData.append(jsonProduct)
+            
+        #return JsonResponse(jsonData, safe=False)
+        jsonData = json.dumps(jsonData)
+        return HttpResponse(jsonData, content_type="application/json")
 
     return JsonResponse({"success": False})
 

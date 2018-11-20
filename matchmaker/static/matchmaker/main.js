@@ -114,10 +114,19 @@ function initDiscover() {
         data: "json",
         success: (data, status) => {
             if (status) {
-                profiles = data.map((e) => {
-                    return e.fields;
+                var profile   = document.getElementById("profile-template").innerHTML;
+                var template = Handlebars.compile(profile);
+        
+                document.getElementById("profile-block").innerHTML = template(data);
+
+                $('.profile-card').click((e) => {
+                    const id = e.currentTarget.id + "Modal"
+                    $('#' + id).modal();
                 });
-                console.log("Obtained profiles", profiles)
+
+                addAllFuncs();
+
+
             }
         }
     });
@@ -127,10 +136,28 @@ function initDiscover() {
         const id = e.currentTarget.id + "Modal"
         $('#' + id).modal();
     });
-    // Click the hot button.
-    //The unlick just needs to do Delete call and supply userid
-    $('.profile-hot').click((e) => {
-        e.stopImmediatePropagation();
+
+
+    function addAllFuncs(){
+        $('.heat-icon').click((e) => {
+            e.stopImmediatePropagation();
+            $(this).removeClass('.heat-icon');
+            $(this).addClass('.heat-icon-active');
+            addAllFuncs();
+            addHeat(e);    
+        });
+
+        $('.heat-icon-active').click((e) => {
+            e.stopImmediatePropagation();
+            $(this).removeClass('.heat-icon-active');
+            $(this).addClass('.heat-icon');
+            addAllFuncs();
+            removeHeat(e);    
+        });
+    }
+
+
+    function addHeat(e){
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
         console.log("Make profile", id, "hot.");
         let form = {};
@@ -144,13 +171,31 @@ function initDiscover() {
             dataType: "json",
             success: (data, status) => {
                 if (status) {
-                    console.log("Obtained profiles", profiles)
+                    console.log("made hot")
                 }
             }
-        });
+        });    
+    }
 
-        
-    });
+    function removeHeat(e){
+        const id = $(e.currentTarget).closest('.profile-card').attr('id');
+        console.log("Delete", id, "Heat.");
+        let form = {};
+        form.username = id;
+        form.csrfmiddlewaretoken = getCookie("csrftoken");
+        //Making hot cal call
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/heat/",
+            type: "DELETE",
+            data: form,
+            dataType: "json",
+            success: (data, status) => {
+                if (status) {
+                    console.log("Delete heat")
+                }
+            }
+        });    
+    }
 
 
     // On init set the user's age from their DOB.

@@ -52,12 +52,19 @@ option[value=""][disabled] {
 
 
 /* Style for the HOT button */
-.icon{
+.heat-icon{
   font-size: 30px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
-.icon:hover{
+
+.heat-icon-active{
+  color: orangered;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.heat-icon:hover{
   color: orangered;
   transition: all 0.2s ease-in-out;
 }

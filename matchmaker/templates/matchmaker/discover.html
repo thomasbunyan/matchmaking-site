@@ -5,6 +5,7 @@
 <head>
     {% block head %}
     <title>Discover</title>
+    {% include 'matchmaker/widgets/profile.html' %}
     {% endblock %}
 </head>
 
@@ -16,66 +17,7 @@
             Filter stuff in here.
         </div>
     </div>
-    <div class="profiles p-3 d-flex flex-row flex-wrap justify-content-center">
-        <!-- Needs to be changed. -->
-        {% for profile in profiles %}
-        <div class="profile-card card shadow pt-3 mb-4 bg-white rounded clickable mx-4" id="{{forloop.counter}}" style="width: 14rem;">
-            <p class="card-content d-flex justify-content-center">
-                <img class="rounded-circle border border-profile border-primary" src="{{ profile.image.url }}" width="150"
-                    height="150" style="object-fit: cover;">
-                <h5 class="text-center text-primary">{{profile.user.first_name}} {{profile.user.last_name}} <span class="age text-secondary">{{profile.dob}}</span><span
-                        class="text-secondary">{{profile.gender}}</span></h5>
-                <div class="d-flex justify-content-around" style="width: 90%; margin:auto">
-                    <small class="adjectives text-uppercase font-weight-bold text-secondary">{{profile.adjectives}}</small>
-                </div>
-                <div class="buttons d-flex justify-content-center pt-3">
-                    <i class="fas fa-fire icon profile-hot"></i>
-                </div>
-            </p>
-        </div>
-        <div class="modal fade profile-modal" id="{{forloop.counter}}Modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-primary">
-                            {{profile.user.first_name}} {{profile.user.last_name}} <span class="age text-secondary">{{profile.dob}}</span><span
-                                class="text-secondary">{{profile.gender}}</span> •
-                            <span class="location text-secondary">{{profile.location}}</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="d-flex flex-row justify-content-between">
-                            <div class="">
-                                <img class=" rounded-circle border border-profile-thick border-primary" src="{{ profile.image.url }}"
-                                    style="object-fit: cover;">
-                            </div>
-                            <div class="pl-4 flex-grow-1">
-                                <div class="d-flex flex-column p-3" style="height:100%">
-                                    <div class="d-flex flex-row flex-wrap justify-content-center" style="width:90%; margin: auto;">
-                                        {% for hobby in profile.hobbies.all %}
-                                        <span class="btn btn-primary mx-1 my-1">{{hobby}}</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="row mt-4 mb-2">
-                                        <p class="text-center" style="width:100%;">{{profile.description}}</p>
-                                    </div>
-                                    <div class="d-flex flex-row justify-content-around" style="margin:auto; width: 30%; font-size: 25px">
-                                        <i class="fab fa-snapchat-ghost"></i>
-                                        <i class="fab fa-instagram"></i>
-                                        <i class="fab fa-twitter"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    <div id="profile-block" class="profiles p-3 d-flex flex-row flex-wrap justify-content-center">
     </div>
     {% endblock %}
 </body>

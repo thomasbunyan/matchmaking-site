@@ -114,6 +114,8 @@ function initDiscover() {
         data: "json",
         success: (data, status) => {
             if (status) {
+
+                console.log(data);
                 var profile   = document.getElementById("profile-template").innerHTML;
                 var template = Handlebars.compile(profile);
         

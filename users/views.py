@@ -72,8 +72,8 @@ def apiProfiles(request):
 
         #Hashmap for all the ones that you have favourited
         favorited = {}
-        for user in request.user.profile.heat.all():
-            favorited[user.id] = True
+        for profile in request.user.profile.heat.all():
+            favorited[profile.id] = True
  
         jsonData = []
         
@@ -98,7 +98,7 @@ def apiProfiles(request):
             
             jsonProduct['hobbies'] = hobbies
 
-            if(profile.user.id in favorited):
+            if(profile.id in favorited):
                 jsonProduct['heat'] = True
             else:
                 jsonProduct['heat'] = False
@@ -140,8 +140,8 @@ def apiProfileIDHeat(request):
         #request.PUT = QueryDict(request.body)
         if(request.POST.get("username") != None):
             username = request.POST['username']
-            user = Profile.objects.get(user=username)
-            request.user.profile.heat.add(user)
+            profile = Profile.objects.get(user=username)
+            request.user.profile.heat.add(profile)
             request.user.profile.save()
             return JsonResponse({"success": True})
         else:
@@ -150,8 +150,8 @@ def apiProfileIDHeat(request):
     elif request.method == "DELETE":
         if(request.POST.get("username") != None):
             username = request.GET['username']
-            user = Profile.objects.get(user=username)
-            request.user.profile.heat.remove(user)
+            profile = Profile.objects.get(user=username)
+            request.user.profile.heat.remove(profile)
         else:
             return JsonResponse({"success": False})
     else:

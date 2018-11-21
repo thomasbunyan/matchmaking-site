@@ -58,15 +58,23 @@ option[value=""][disabled] {
   transition: all 0.2s ease-in-out;
 }
 
+
+.heat-icon:hover{
+  color: orangered;
+  transition: all 0.2s ease-in-out;
+}
+
 .heat-icon-active{
   color: orangered;
   font-size: 30px;
   cursor: pointer;
 }
 
-.heat-icon:hover{
-  color: orangered;
-  transition: all 0.2s ease-in-out;
+
+.heat-icon-active:hover{
+  color: black;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 

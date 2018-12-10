@@ -1,3 +1,6 @@
+//Global Root URL no trailing slash - add slash if using root url
+const ROOTURL = window.location.protocol + "//" + window.location.host
+
 $(() => {
     const page = window.location.href.split("/")[3];
     if (page === "") initHome();
@@ -26,7 +29,7 @@ function initLogin() {
             return;
         }
 
-        const url = "http://127.0.0.1:8000/api/login/";
+        const url = ROOTURL + "/api/login/";
         $.ajax({
             url: url,
             type: "POST",
@@ -37,9 +40,9 @@ function initLogin() {
                     if (data.success) {
                         const next = getUrlParameter("next");
                         if (next !== undefined) {
-                            window.location.replace("http://127.0.0.1:8000" + next);
+                            window.location.replace(ROOTURL + next);
                         } else {
-                            window.location.replace("http://127.0.0.1:8000/" + data.redirect);
+                            window.location.replace(ROOTURL + "/" + data.redirect);
                         }
                     } else {
                         console.log("bad login")
@@ -71,7 +74,7 @@ function initRegister() {
         // Need a username, use the email.
         form.username = form.email;
 
-        const url = "http://127.0.0.1:8000/api/register/";
+        const url = ROOTURL + "/api/register/";
         $.ajax({
             url: url,
             type: "POST",
@@ -83,7 +86,7 @@ function initRegister() {
             success: (data, status) => {
                 if (status) {
                     if (data.success) {
-                        window.location.replace("http://127.0.0.1:8000/" + data.redirect);
+                        window.location.replace(ROOTURL + "/" + data.redirect);
                     } else {
                         validateForm(data.errors);
                     }
@@ -129,7 +132,7 @@ function initDiscover(minAge, maxAge, gender) {
     const date = new Date();
     const csrf = getCookie("csrftoken");
     let profiles = [];
-    let url = 'http://127.0.0.1:8000/api/profiles/?json';
+    let url = ROOTURL + '/api/profiles/?json';
 
     console.log(minAge, maxAge, gender)
 
@@ -148,7 +151,7 @@ function initDiscover(minAge, maxAge, gender) {
     console.log(url)
 
     // GET data.
-    //const url = "http://127.0.0.1:8000/api/profiles/";
+    //const url = ROOTURL + "/api/profiles/";
     $.ajax({
         url: url,
         type: "GET",
@@ -207,7 +210,7 @@ function initDiscover(minAge, maxAge, gender) {
         form.csrfmiddlewaretoken = getCookie("csrftoken");
         //Making hot cal call
         $.ajax({
-            url: "http://127.0.0.1:8000/api/heat/",
+            url: ROOTURL + "/api/heat/",
             type: "POST",
             data: form,
             dataType: "json",
@@ -227,7 +230,7 @@ function initDiscover(minAge, maxAge, gender) {
         form.csrfmiddlewaretoken = getCookie("csrftoken");
         //Making hot cal call
         $.ajax({
-            url: "http://127.0.0.1:8000/api/heat/",
+            url: ROOTURL + "/api/heat/",
             type: "DELETE",
             headers: {
                 'X-CSRFToken': getCookie("csrftoken"),

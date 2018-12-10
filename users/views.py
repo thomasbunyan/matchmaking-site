@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProfileUpdateCreate
 from .models import Profile, Hobby
 
 from datetime import date
@@ -156,14 +156,29 @@ def apiHobby(request, id):
 
 def apiRegister(request):
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
+        uform = UserRegisterForm(request.POST)
+        
+        if uform.is_valid():
             print("valid")
-            form.save()
+            uform.save()
+            user = uform.instance
+            pform = ProfileUpdateCreate(request.POST, instance=user.profile)
+            if pform.is_valid():
+                print("Hello")
+                pform.save()
+            else:
+                print(pform.errors)
+            
+            
+            #pform.user = uform
+            #pform.save()
+            print(uform)
+            print(pform)
+
             return JsonResponse({"success": True, "redirect": "login/"})
         else:
             print("not valid")
-            return JsonResponse({"success": False, "errors": form.errors})
+            return JsonResponse({"success": False, "errors": str(uform.errors) + " " + str(pform.errors)})
     else:
         return JsonResponse({"success": False})
 

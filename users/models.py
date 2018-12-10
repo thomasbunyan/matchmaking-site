@@ -24,7 +24,7 @@ class Profile(models.Model):
     description = models.TextField(
         default="Something about yourself", max_length=200)
     location = models.CharField(default="Town/City", max_length=100)
-    dob = models.DateField()
+    dob = models.DateField(null=True)
     hobbies = models.ManyToManyField(
         Hobby, blank=True, related_name='categories')
     adjectives = models.TextField(default="adjective", max_length=400)

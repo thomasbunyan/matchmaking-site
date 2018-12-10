@@ -76,6 +76,9 @@ function initRegister() {
             url: url,
             type: "POST",
             data: form,
+            headers: {
+                'X-CSRFToken': getCookie("csrftoken"),
+            },
             dataType: "json",
             success: (data, status) => {
                 if (status) {

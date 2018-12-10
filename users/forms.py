@@ -20,7 +20,7 @@ class ProfileUpdateCreate(forms.ModelForm):
     dob = forms.DateField(required=True)
     class Meta:
         model = Profile
-        fields = ['dob']
+        fields = ['dob', 'gender']
         
 
 class UserUpdateForm(forms.ModelForm):

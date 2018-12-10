@@ -4,7 +4,7 @@ $(() => {
     else if (page === "login") initLogin();
     else if (page === "register") initRegister();
     else if (page === "profile") initProfile();
-    else if (page === "discover") initDiscover();
+    else if (page === "discover") initDiscover(); initSearch();
 });
 
 function initHome() {
@@ -102,15 +102,53 @@ function initProfile() {
 
 }
 
-function initDiscover() {
+function initSearch() {
+    // Register js.
+    console.log("Search");
+    $('#filterButton').click(() => {
+        console.log("Hello World");
+        let form = getFormData($("#search"));
+
+        // Validate frontend here.
+        let valid = true;
+        if (!valid) {
+            console.log("Not valid");
+            return;
+        }
+
+        //console.log(form.minAge, form.maxAge, form.gender)
+
+        initDiscover(form.minAge, form.maxAge, form.gender);        
+        
+    });
+}
+
+function initDiscover(minAge, maxAge, gender) {
     // Discover js.
     console.log("Discover");
     const date = new Date();
     const csrf = getCookie("csrftoken");
     let profiles = [];
+    let url = 'http://127.0.0.1:8000/api/profiles/?json';
+
+    console.log(minAge, maxAge, gender)
+
+    if(minAge){
+        url = url + "&minAge=" + minAge;
+    }
+
+    if(maxAge){
+        url = url + "&maxAge=" + maxAge;
+    }
+
+    if(gender){
+        url = url + "&gender=" + gender;
+    }
+
+    console.log(url)
 
     // GET data.
-    const url = "http://127.0.0.1:8000/api/profiles/";
+    //const url = "http://127.0.0.1:8000/api/profiles/";
     $.ajax({
         url: url,
         type: "GET",

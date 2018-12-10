@@ -76,6 +76,7 @@ def apiProfiles(request):
         minAge = request.GET.get('minAge')
         maxAge = request.GET.get('maxAge')
         gender = request.GET.get('gender')
+        
         res = Profile.objects.exclude(user=request.user.id)
         if minAge:
             minAge = int(minAge)
@@ -98,9 +99,13 @@ def apiProfiles(request):
         #res = serializers.serialize('json', res)
 
         #Hashmap for all the ones that you have favourited
-        favorited = {}
+        favorited = []
         for profile in request.user.profile.heat.all():
-            favorited[profile.id] = True
+            favorited.append(profile.id)
+        
+        userhobbies = []
+        for hobby in request.user.profile.hobbies.all():
+            userhobbies.append(hobby.name)
  
         jsonData = []
         
@@ -121,15 +126,18 @@ def apiProfiles(request):
                             'location': profile.location,
                             'description' : profile.description,
                             'adjectives' : profile.adjectives,
-                            'views' : str(profile.views),
-                            
+                            'views' : str(profile.views),             
             }
 
             hobbies = []
+            chobbies = 0
             for hobby in profile.hobbies.all():
                 hobbies.append(hobby.name)
+                if(hobby.name in userhobbies):
+                    chobbies = chobbies + 1
             
             jsonProduct['hobbies'] = hobbies
+            jsonProduct['commonhobbies'] = chobbies
 
             if(profile.id in favorited):
                 jsonProduct['heat'] = True
@@ -139,6 +147,8 @@ def apiProfiles(request):
             jsonData.append(jsonProduct)
             
         #return JsonResponse(jsonData, safe=False)
+        #Sort the json data by common hobbies
+        jsonData = sorted(jsonData, key=lambda k: k['commonhobbies'], reverse=True)
         jsonData = json.dumps(jsonData)
         return HttpResponse(jsonData, content_type="application/json")
 
@@ -165,7 +175,7 @@ def apiRegister(request):
             user = uform.instance
             pform = ProfileUpdateCreate(request.POST, instance=user.profile)
             pform.save()
-            
+
             #pform.user = uform
             #pform.save()
             print(uform)

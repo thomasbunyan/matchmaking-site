@@ -8,13 +8,14 @@ from django.contrib.auth import authenticate
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Hobby
 
+from datetime import date
+from django.utils.timezone import now
+
 import json
 
 
 @login_required
 def profile(request):
-
-
 
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -70,7 +71,29 @@ def apiProfile(request):
 @login_required
 def apiProfiles(request):
     if request.method == "GET":
+        #Query Filter are lazily evaluated
+        current = now().date()
+        minAge = request.GET.get('minAge')
+        maxAge = request.GET.get('maxAge')
+        gender = request.GET.get('gender')
         res = Profile.objects.exclude(user=request.user.id)
+        if minAge:
+            minAge = int(minAge)
+            min_date = date(current.year - minAge, current.month, current.day)
+            res = res.filter(dob__lte=min_date)
+            
+
+        if maxAge:
+            maxAge = int(maxAge)
+            max_date = date(current.year - maxAge, current.month, current.day)
+            res = res.filter(dob__gte=max_date)
+
+        if gender:
+            if gender == "M":
+                res = res.filter(gender = 'M')
+            else:
+                res = res.filter(gender = 'F')
+            
         #Manually Making Json File
         #res = serializers.serialize('json', res)
 
@@ -82,12 +105,18 @@ def apiProfiles(request):
         jsonData = []
         
         for profile in res:
-            
+
+            #Temp fix for dates
+            # if(profile.dob):
+            #     dob = profile.dob.strftime('%Y-%m-%d')
+            # else:
+            #     dob = "N/A"
+
             jsonProduct = { 'id' : profile.user.id,
                             'image': '/media/' + str(profile.image),
                             'firstname': profile.user.first_name,
                             'lastname' : profile.user.last_name,
-                            'dob' : profile.dob,
+                            'dob' : profile.dob.strftime('%Y-%m-%d'),
                             'gender' : profile.gender,
                             'location': profile.location,
                             'description' : profile.description,

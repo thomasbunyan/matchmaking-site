@@ -72,6 +72,8 @@ option[value=""][disabled] {
 
 
 .heat-icon-active:hover{
+  transition: all 0.2s ease-in-out;
+
   color: black;
   font-size: 30px;
   cursor: pointer;

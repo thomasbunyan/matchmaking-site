@@ -143,16 +143,15 @@ function initDiscover() {
     function addAllFuncs(){
         $('.heat-icon').click((e) => {
             e.stopImmediatePropagation();
-            $(this).removeClass('.heat-icon');
-            $(this).addClass('.heat-icon-active');
+            //window.alert('Hiiii');
+            $(e.target).toggleClass('heat-icon-active heat-icon');
             addAllFuncs();
             addHeat(e);    
         });
 
         $('.heat-icon-active').click((e) => {
             e.stopImmediatePropagation();
-            $(this).removeClass('.heat-icon-active');
-            $(this).addClass('.heat-icon');
+            $(e.target).toggleClass('heat-icon-active heat-icon');
             addAllFuncs();
             removeHeat(e);    
         });

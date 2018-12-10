@@ -4,6 +4,7 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProfileUpdateCreate
 from .models import Profile, Hobby
@@ -59,8 +60,15 @@ def apiLogin(request):
 def apiProfile(request):
     if request.method == "GET":
         res = Profile.objects.filter(user=request.user.id)
-        #Increase counter every time you make call to get individual profile
+
+        #Increase counter every time you make call to get individual profile if not user
         res.views = res.views+1
+
+        #If user then change prevHeats and tell user how many new ones since last time
+        newHeats = res.user_heat.count()-res.prevHeat
+        res.prevHeat = res.user_heat.count()
+
+
         res.save()
 
         res = serializers.serialize('json', res)
@@ -147,6 +155,7 @@ def apiProfiles(request):
             jsonData.append(jsonProduct)
             
         #return JsonResponse(jsonData, safe=False)
+
         #Sort the json data by common hobbies
         jsonData = sorted(jsonData, key=lambda k: k['commonhobbies'], reverse=True)
         jsonData = json.dumps(jsonData)
@@ -197,6 +206,27 @@ def apiProfileIDHeat(request):
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
             request.user.profile.save()
+
+            #Email Details
+            firstName = profile.user.first_name
+            lastName = profile.user.last_name
+            email = profile.user.email
+            subject = 'Someone has given you some heat!'
+            fromemail = 'no-reply@no-reply.com'
+            message = "Dear " + firstName + " " + lastName + "\n"
+            message += "You have just recieved some heat, check the website to get more matches!\n"
+            message += "Regards,\nMatchMaker"
+
+
+            #Send Email to user when new heat recieved
+            send_mail(
+                subject,
+                message,
+                fromemail,
+                [email],
+                fail_silently=False,
+            )
+
             return JsonResponse({"success": True})
         else:
             return JsonResponse({"success": False})

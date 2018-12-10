@@ -1,0 +1,7 @@
+Dear {{ firstName }} {{ LastName }},
+
+You have just recieved some heat, check the website to get more matches!
+
+Regards,
+
+MatchMaker (University Web Programming Project)

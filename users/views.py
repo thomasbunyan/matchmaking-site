@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
-
+from django.template.loader import render_to_string
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProfileUpdateCreate
 from .models import Profile, Hobby
 
@@ -212,16 +212,17 @@ def apiProfileIDHeat(request):
             lastName = profile.user.last_name
             email = profile.user.email
             subject = 'Someone has given you some heat!'
-            fromemail = 'no-reply@no-reply.com'
-            message = "Dear " + firstName + " " + lastName + "\n"
-            message += "You have just recieved some heat, check the website to get more matches!\n"
-            message += "Regards,\nMatchMaker"
+            fromemail = 'no-reply@neshanthan.com'
 
+            context = {
+                'firstName' : firstName,
+                'lastName' : lastName
+            }
 
             #Send Email to user when new heat recieved
             send_mail(
                 subject,
-                message,
+                render_to_string('emails/newheat.txt', context),
                 fromemail,
                 [email],
                 fail_silently=False,

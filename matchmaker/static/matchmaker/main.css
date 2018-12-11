@@ -49,6 +49,21 @@ option[value=""][disabled] {
     transform: scale(1.03);
     transition: all 0.6s ease-in-out;
 }
+.image-overlay{
+  display: inline-block;
+  padding-top: 40px;
+  padding-left: 15px;
+  opacity: 0;
+  color: #fff;
+  text-align: center;
+  font-size: 30pt;
+  transition: 0.2s all ease-in-out;
+}
+.image-overlay:hover{
+  opacity: 1;
+  background-color: #2125295b;
+  transition: 0.2s all ease-in-out;
+}
 
 
 /* Style for the HOT button */

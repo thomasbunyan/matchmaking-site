@@ -11,33 +11,114 @@
 <body>
     {% block body %}
     <div class="content-section">
-        <div class="profile-top shadow p-4 mt-5 bg-white rounded" style="width:48rem; margin:auto">
-            <div class="media d-inline-flex justify-content-around" style="width:100%">
-                <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" height="150" width="150"
-                    style="object-fit: cover;">
-                <div class="col align-self-center">
-                    <h2 class="account-heading text-primary">{{ user.first_name }}</h2>
-                    <h2 class="account-heading">{{ user.last_name }}</h2>
-                </div>
-                <div class="col text-center align-self-center">
-                    <h4 class="">Views: <span>{{ views }}</span></h4>
-                    <h4 class="">Hotness: <span>{{ heat }}</span></h4>
+        <div class="profile-top shadow p-4 mt-5 bg-white rounded d-flex" style="width:48rem; margin:auto">
+            <div class="media">
+                <div class="rounded-circle" style="height:150px; width:150px;position:relative">
+                    <img class="rounded-circle" id="profile-picture" src="" height="150" width="150" style="object-fit: cover; position:absolute">
+                    <label class="rounded-circle image-overlay" style="height:150px; width:150px; position:absolute">
+                        <label for="profile-image">
+                            <i id="editProfileImage" class="fas fa-user-edit" style="cursor: pointer;"></i>
+                            <input id="profile-picture-input" type="file" onchange="uploadFile()" style="display: none;"></input>
+                        </label>
+                    </label>
                 </div>
             </div>
+            <div class="col align-self-center">
+                <h2 class="account-heading text-primary">{{ user.first_name }}</h2>
+                <h2 class="account-heading">{{ user.last_name }}</h2>
+            </div>
+            <div class="col text-center align-self-center">
+                <h4 class="">Views: <span>{{ views }}</span></h4>
+                <h4 class="">Hotness: <span>{{ heat }}</span></h4>
+            </div>
         </div>
-        <div class="profile-top shadow p-4 mt-3 mb-5 bg-white rounded" style="width:48rem; margin:auto">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <fieldset class='form-group'>
-                    <h3 class="mb-4">Profile Info</h3>
-                    {{ u_form.as_p }}
-                    {{ p_form.as_p }}
-                </fieldset>
-                <div class="text-center">
-                    <input id="updateButton" type="submit" class="btn btn-primary " value="Update">
-                </div>
-            </form>
-        </div>
+    </div>
+    <div class="profile-top shadow p-4 mt-3 bg-white rounded" style="width:48rem; margin:auto; margin-bottom: 200px">
+        <form method="POST" enctype="multipart/form-data" id="updateProfile">
+            <!-- {% csrf_token %} -->
+            <fieldset class='form-group' style="width:75%; margin: auto">
+                <h3 class="mb-4 text-center">Profile Info</h3>
+                <form acition="" id="updateProfile" class="main-form">
+                    <div class="form-group">
+                        <label for="first_name">First name:</label>
+                        <input type="text" name="first_name" id="first_name" class="form-control" autocomplete="first_name"
+                            placeholder="e.g. John">
+                        <div id="errorFirstName" class="invalid-feedback">Invalid first name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last name:</label>
+                        <input type="text" name="last_name" id="last_name" class="form-control" autocomplete="last_name"
+                            placeholder="e.g. Smith">
+                        <div id="errorLastName" class="invalid-feedback">Invalid last name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" autocomplete="email"
+                            placeholder="e.g. johnsmith@email.com">
+                        <div id="errorEmail" class="invalid-feedback">Invalid email</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender">
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                        <div id="errorGender" class="invalid-feedback">Invalid gender</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description about yourself:</label>
+                        <textarea type="text" name="description" id="description" class="form-control" rows=3
+                            autocomplete="description" style="resize: none;" maxLength=200 placeholder="e.g. I'm interested in..."></textarea>
+                        <div id="errorDescription" class="invalid-feedback">Invalid description</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" name="location" id="location" class="form-control" autocomplete="location"
+                            placeholder="e.g. London">
+                        <div id="errorLocation" class="invalid-feedback">Invalid location</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of birth:</label>
+                        <input type="date" name="dob" id="dob" class="form-control" autocomplete="dob">
+                        <div id="errorDOB" class="invalid-feedback">Invalid date of birth</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hobbies">Hobbies (Click them to remove or add more from our list):</label>
+                        <div id="picked-hobbies">
+                        </div>
+                        <div class="input-group mt-3">
+                            <select class="custom-select" size="1" id="hobbies">
+                                <option selected>Choose...</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button id="addHobby" class="btn btn-outline-secondary" type="button">Add</button>
+                            </div>
+                        </div>
+
+                        <div id="errorHobbies" class="invalid-feedback">Invalid hobbies</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjectives">Adjectives (Add a few words to describe yourself):</label>
+                        <div class="text-center d-flex justify-content-between">
+                            <input type="text" name="adjective1" id="adjective1" class="form-control" autocomplete="adjectives"
+                                style="width:32%" placeholder="e.g. Attractive">
+                            <input type="text" name="adjective2" id="adjective2" class="form-control" autocomplete="adjectives"
+                                style="width:32%" placeholder="e.g. Charming">
+                            <input type="text" name="adjective3" id="adjective3" class="form-control" autocomplete="adjectives"
+                                style="width:32%" placeholder="e.g. Ambitious">
+                        </div>
+                        <div id="errorLocation" class="invalid-feedback">Invalid location</div>
+                    </div>
+                </form>
+                <!-- <h1>YO</h1> -->
+                <!-- {{ u_form.as_p }} -->
+                <!-- {{ p_form.as_p }} -->
+            </fieldset>
+            <div class="text-center">
+                <input id="updateButton" type="button" class="btn btn-primary " value="Update">
+            </div>
+        </form>
+    </div>
     </div>
     {% endblock %}
 </body>

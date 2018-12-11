@@ -7,9 +7,9 @@ $(() => {
     else if (page === "login") initLogin();
     else if (page === "register") initRegister();
     else if (page === "profile") initProfile();
-    else if (page === "discover") {initDiscover(); initSearch();}
-    else if (page === "matches") {initMatches(); initSearch();}
-    
+    else if (page === "discover") { initDiscover(); initSearch(); }
+    else if (page === "matches") { initMatches(); initSearch(); }
+
 });
 
 function initHome() {
@@ -104,7 +104,101 @@ function initRegister() {
 function initProfile() {
     // Profile js.
     console.log("Profile");
+    var hobbies = [];
+    var allHobbies = [];
+    const url = ROOTURL + '/api/profile';
+    const url2 = ROOTURL + '/api/hobbies';
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: "json",
+        success: (data, status) => {
+            if (status) {
+                console.log(data);
+                $('#first_name')[0].value = data.firstname;
+                $('#last_name')[0].value = data.lastname;
+                $('#email')[0].value = data.email;
+                $('#gender')[0].value = data.gender;
+                $('#description')[0].value = data.description;
+                $('#location')[0].value = data.location;
+                $('#dob')[0].value = data.dob;
+                $('#adjective1')[0].value = data.adjectives.split(",")[0];
+                $('#adjective2')[0].value = data.adjectives.split(",")[1];
+                $('#adjective3')[0].value = data.adjectives.split(",")[2];
+                $('#profile-picture').attr("src", data.image);
+                hobbies = data.hobbies;
+                hobbies.forEach(hobby => {
+                    $('#picked-hobbies').append("<span class='btn btn-primary mx-1 my-1 selectedHobbies'>" + hobby + "</span>");
+                });
+                $('#addHobby').click(() => {
+                    let option = $('#hobbies').find(":selected").val();
+                    if (option != "Choose..." && hobbies.findIndex(e => {
+                        return e == option;
+                    }) == -1) {
+                        hobbies.push(option);
+                        $('#picked-hobbies').append("<span class='btn btn-primary mx-1 my-1 selectedHobbies'>" + option + "</span>");
+                        addHobbyButtonListeners(hobbies);
+                    }
+                });
+                addHobbyButtonListeners(hobbies);
+            }
+        }
+    });
+    $.ajax({
+        url: url2,
+        type: "GET",
+        data: "json",
+        success: (data, status) => {
+            if (status) {
+                allHobbies = data.map(x => {
+                    return x.fields.name;
+                });
+                allHobbies.forEach(hobby => {
+                    $('#hobbies').append("<option>" + hobby + "</option>")
+                });
+            }
+        }
+    });
+    $('#updateButton').click(() => {
+        console.log($('#profile-picture').attr("src"))
+        let form = getFormData($("#updateProfile"));
+        const update = {
+            first_name: form.first_name,
+            last_name: form.last_name,
+            email: form.email,
+            gender: "FIX",
+            description: form.description,
+            location: form.location,
+            dob: form.dob,
+            adjectives: form.adjective1.replace(/ /g, '') + "," + form.adjective2.replace(/ /g, '') + "," + form.adjective3.replace(/ /g, ''),
+            hobbies: hobbies,
+            image: "FIX"
+        }
+        console.log(update);
+    });
+}
 
+function uploadFile() {
+    var picture = $('#profile-picture')[0];
+    var file = $('#profile-picture-input')[0].files[0];
+    var fileReader = new FileReader();
+    fileReader.onloadend = function () {
+        picture.src = fileReader.result;
+    }
+    if (file) {
+        fileReader.readAsDataURL(file);
+    }
+}
+
+function addHobbyButtonListeners(hobbies) {
+    $('.selectedHobbies').click((e) => {
+        let removeHobby = e.target.innerHTML;
+        let index = hobbies.findIndex(e => {
+            return e == removeHobby;
+        });
+        hobbies.splice(index, 1);
+        e.target.remove();
+    });
 }
 
 function initSearch() {
@@ -123,14 +217,14 @@ function initSearch() {
 
         //console.log(form.minAge, form.maxAge, form.gender)
 
-        initDiscover(form.minAge, form.maxAge, form.gender);        
-        
+        initDiscover(form.minAge, form.maxAge, form.gender);
+
     });
 }
 
-function initMatches(minAge, maxAge, gender){
+function initMatches(minAge, maxAge, gender) {
     getProfiles(minAge, maxAge, gender, true)
-    
+
 }
 
 function initDiscover(minAge, maxAge, gender) {
@@ -147,19 +241,19 @@ function getProfiles(minAge, maxAge, gender, matches) {
 
     console.log(minAge, maxAge, gender)
 
-    if(minAge){
+    if (minAge) {
         url = url + "&minAge=" + minAge;
     }
 
-    if(maxAge){
+    if (maxAge) {
         url = url + "&maxAge=" + maxAge;
     }
 
-    if(gender){
+    if (gender) {
         url = url + "&gender=" + gender;
     }
 
-    if(matches){
+    if (matches) {
         url = url + "&matches=true";
     }
 
@@ -175,9 +269,9 @@ function getProfiles(minAge, maxAge, gender, matches) {
             if (status) {
 
                 console.log(data);
-                var profile   = document.getElementById("profile-template").innerHTML;
+                var profile = document.getElementById("profile-template").innerHTML;
                 var template = Handlebars.compile(profile);
-        
+
                 document.getElementById("profile-block").innerHTML = template(data);
 
                 $('.profile-card').click((e) => {
@@ -199,25 +293,25 @@ function getProfiles(minAge, maxAge, gender, matches) {
     });
 
 
-    function addAllFuncs(){
+    function addAllFuncs() {
         $('.heat-icon').click((e) => {
             e.stopImmediatePropagation();
             //window.alert('Hiiii');
             $(e.target).toggleClass('heat-icon-active heat-icon');
             addAllFuncs();
-            addHeat(e);    
+            addHeat(e);
         });
 
         $('.heat-icon-active').click((e) => {
             e.stopImmediatePropagation();
             $(e.target).toggleClass('heat-icon-active heat-icon');
             addAllFuncs();
-            removeHeat(e);    
+            removeHeat(e);
         });
     }
 
 
-    function addHeat(e){
+    function addHeat(e) {
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
         console.log("Make profile", id, "hot.");
         let form = {};
@@ -234,10 +328,10 @@ function getProfiles(minAge, maxAge, gender, matches) {
                     console.log("made hot")
                 }
             }
-        });    
+        });
     }
 
-    function removeHeat(e){
+    function removeHeat(e) {
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
         console.log("Delete", id, "Heat.");
         let form = {};
@@ -257,7 +351,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
                     console.log("Delete heat")
                 }
             }
-        });    
+        });
     }
 
 

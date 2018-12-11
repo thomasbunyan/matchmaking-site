@@ -84,6 +84,7 @@ def apiProfile(request, userid = None):
                                 'image': '/media/' + str(profile.image),
                                 'firstname': profile.user.first_name,
                                 'lastname' : profile.user.last_name,
+                                'email': profile.user.email,
                                 'dob' : profile.dob.strftime('%Y-%m-%d'),
                                 'gender' : profile.gender,
                                 'location': profile.location,
@@ -220,6 +221,13 @@ def apiHobby(request, id):
         return HttpResponse(res, content_type="application/json")
 
     return JsonResponse({"success": False})
+
+
+def apiHobbies(request):
+    if request.method == "GET":
+        res = Hobby.objects.all()
+        res = serializers.serialize('json', res)
+        return HttpResponse(res, content_type="application/json")
 
 
 def apiRegister(request):

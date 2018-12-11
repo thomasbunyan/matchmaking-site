@@ -7,7 +7,9 @@ $(() => {
     else if (page === "login") initLogin();
     else if (page === "register") initRegister();
     else if (page === "profile") initProfile();
-    else if (page === "discover") initDiscover(); initSearch();
+    else if (page === "discover") {initDiscover(); initSearch();}
+    else if (page === "matches") {initMatches(); initSearch();}
+    
 });
 
 function initHome() {
@@ -126,9 +128,18 @@ function initSearch() {
     });
 }
 
+function initMatches(minAge, maxAge, gender){
+    getProfiles(minAge, maxAge, gender, true)
+    
+}
+
 function initDiscover(minAge, maxAge, gender) {
-    // Discover js.
     console.log("Discover");
+    getProfiles(minAge, maxAge, gender, null)
+}
+
+function getProfiles(minAge, maxAge, gender, matches) {
+    console.log("get Profiles");
     const date = new Date();
     const csrf = getCookie("csrftoken");
     let profiles = [];
@@ -146,6 +157,10 @@ function initDiscover(minAge, maxAge, gender) {
 
     if(gender){
         url = url + "&gender=" + gender;
+    }
+
+    if(matches){
+        url = url + "&matches=true";
     }
 
     console.log(url)

@@ -3,14 +3,42 @@ const ROOTURL = window.location.protocol + "//" + window.location.host
 
 $(() => {
     const page = window.location.href.split("/")[3];
-    if (page === "") initHome();
-    else if (page === "login") initLogin();
-    else if (page === "register") initRegister();
-    else if (page === "profile") initProfile();
-    else if (page === "discover") {initDiscover(); initSearch();}
+    if (page === "") {initHome();}
+    else if (page === "login") {initLogin();}
+    else if (page === "register") {initRegister();}
+    else if (page === "profile") {initProfile();}
+    else if (page === "discover") {initDiscover(); initSearch(); getNotifications();}
     else if (page === "matches") {initMatches(); initSearch();}
     
 });
+
+function getNotifications(){
+    //Check for new notifications every minute
+    $.ajax({
+        url: ROOTURL + '/api/notifications/',
+        type: "GET",
+        data: "json",
+        success: (data, status) => {
+            if (status) {
+
+                //If you have new heats generate alert
+                if(data.newheats > 0){
+                   console.log("You have new heats!")     
+                }
+                
+                //You have a new match generate alert
+                if(data.newmatches > 0){
+                    console.log("You have new matches!")   
+                } 
+
+                console.log(data);
+            }
+        }
+    }).always(function(){
+        setTimeout(getNotifications,60000);
+   });
+
+}
 
 function initHome() {
     // Home js.

@@ -3,32 +3,22 @@ const ROOTURL = window.location.protocol + "//" + window.location.host
 
 $(() => {
     const page = window.location.href.split("/")[3];
-<<<<<<< HEAD
-    if (page === "") initHome();
-    else if (page === "login") initLogin();
-    else if (page === "register") initRegister();
-    else if (page === "profile") initProfile();
-    else if (page === "discover") { initDiscover(); initSearch(); }
-    else if (page === "matches") { initMatches(); initSearch(); }
+    if (page === "") { initHome(); }
+    else if (page === "login") { initLogin(); }
+    else if (page === "register") { initRegister(); }
+    else if (page === "profile") { initProfile(); getNotifications(); }
+    else if (page === "discover") { initDiscover(); initSearch(); getNotifications(); }
+    else if (page === "mymatches") { initMatches(); initSearch(); getNotifications(); }
 
-=======
-    if (page === "") {initHome();}
-    else if (page === "login") {initLogin();}
-    else if (page === "register") {initRegister();}
-    else if (page === "profile") {initProfile(); getNotifications();}
-    else if (page === "discover") {initDiscover(); initSearch(); getNotifications();}
-    else if (page === "mymatches") {initMatches(); initSearch(); getNotifications();}
-    
->>>>>>> 1a21fa5d5cb2566bbfd653bdbaf963ee428ab290
 });
 
-function getNotifications(){
+function getNotifications() {
     //Check for new notifications every minute
 
-    var heatAlert   = document.getElementById("alert-heat").innerHTML;
+    var heatAlert = document.getElementById("alert-heat").innerHTML;
     var alertHeatTemplate = Handlebars.compile(heatAlert);
 
-    var matchesAlert   = document.getElementById("alert-matches").innerHTML;
+    var matchesAlert = document.getElementById("alert-matches").innerHTML;
     var alertMatchesTemplate = Handlebars.compile(matchesAlert);
 
     $.ajax({
@@ -45,24 +35,24 @@ function getNotifications(){
                 debug = false;
 
                 //If you have new heats generate alert
-                if(debug || data.newheats > 0){
-                   //$('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
-                   console.log("You have new heats!");
+                if (debug || data.newheats > 0) {
+                    //$('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
+                    console.log("You have new heats!");
                 }
-                
+
                 //You have a new match generate alert
-                if(debug || data.newmatches > 0){
+                if (debug || data.newmatches > 0) {
                     console.log("You have new matches!");
-                    $('#allalerts').prepend(alertMatchesTemplate({"newmatches" : data.newmatches, "nurl" :  ROOTURL + '/mymatches'}));
-                } 
+                    $('#allalerts').prepend(alertMatchesTemplate({ "newmatches": data.newmatches, "nurl": ROOTURL + '/mymatches' }));
+                }
 
                 console.log(data);
             }
         }
-    }).always(function(){
+    }).always(function () {
         //Every minute check for new notifications
-        setTimeout(getNotifications,60000);
-   });
+        setTimeout(getNotifications, 60000);
+    });
 
 }
 
@@ -160,8 +150,8 @@ function initProfile() {
     console.log("Profile");
     var hobbies = [];
     var allHobbies = [];
-    const url = ROOTURL + '/api/profile';
-    const url2 = ROOTURL + '/api/hobbies';
+    const url = ROOTURL + '/api/profile/';
+    const url2 = ROOTURL + '/api/hobbies/';
     $.ajax({
         url: url,
         type: "GET",
@@ -203,32 +193,49 @@ function initProfile() {
         type: "GET",
         data: "json",
         success: (data, status) => {
+            allHobbies = data;
             if (status) {
-                allHobbies = data.map(x => {
-                    return x.fields.name;
-                });
-                allHobbies.forEach(hobby => {
-                    $('#hobbies').append("<option>" + hobby + "</option>")
+                data.forEach(hobby => {
+                    $('#hobbies').append("<option>" + hobby.fields.name + "</option>")
                 });
             }
         }
     });
     $('#updateButton').click(() => {
-        console.log($('#profile-picture').attr("src"))
         let form = getFormData($("#updateProfile"));
+        let updateHobbies = [];
+        hobbies.forEach(h => {
+            const index = allHobbies.findIndex((aH) => {
+                return aH.fields.name == h;
+            });
+            updateHobbies.push(allHobbies[index].pk);
+        });
+
         const update = {
             first_name: form.first_name,
             last_name: form.last_name,
             email: form.email,
-            gender: "FIX",
+            gender: $('#gender').find(":selected").val(),
             description: form.description,
             location: form.location,
             dob: form.dob,
             adjectives: form.adjective1.replace(/ /g, '') + "," + form.adjective2.replace(/ /g, '') + "," + form.adjective3.replace(/ /g, ''),
-            hobbies: hobbies,
-            image: "FIX"
+            hobbies: updateHobbies,
+            image: $('#profile-picture').attr("src")
         }
         console.log(update);
+        $.ajax({
+            url: url,
+            type: "PUT",
+            headers: { "X-CSRFToken": getCookie("csrftoken") },
+            data: update,
+            dataType: "json",
+            success: (data, status) => {
+                if (status) {
+                    console.log(data)
+                }
+            }
+        });
     });
 }
 
@@ -270,16 +277,10 @@ function initSearch() {
         }
 
         //console.log(form.minAge, form.maxAge, form.gender)
-<<<<<<< HEAD
-
-        initDiscover(form.minAge, form.maxAge, form.gender);
-
-=======
         const page = window.location.href.split("/")[3];
-        if (page === "discover") {initDiscover(form.minAge, form.maxAge, form.gender);}
-        else if (page === "mymatches") {initMatches(form.minAge, form.maxAge, form.gender);}
-        
->>>>>>> 1a21fa5d5cb2566bbfd653bdbaf963ee428ab290
+        if (page === "discover") { initDiscover(form.minAge, form.maxAge, form.gender); }
+        else if (page === "mymatches") { initMatches(form.minAge, form.maxAge, form.gender); }
+
     });
 }
 

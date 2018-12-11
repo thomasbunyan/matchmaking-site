@@ -18,6 +18,10 @@
   <link rel="stylesheet" type="text/css" href="{% static 'matchmaker/main.css' %}" />
   <script src="{% static 'matchmaker/main.js' %}"></script>
   <script src="{% static 'matchmaker/handlebars.js' %}"></script>
+  {% block alerts %}
+  {% include 'matchmaker/widgets/alertHeat.html' %}
+  {% include 'matchmaker/widgets/alertMatches.html' %}
+  {% endblock %}
   {% block head %}
   <title>CHANGE ME</title>
   {% endblock %}
@@ -49,6 +53,8 @@
         </ul>
       </div>
     </nav>
+    <div id="allalerts">
+    </div>
     {% block body %}
     {% endblock %}
   </div>

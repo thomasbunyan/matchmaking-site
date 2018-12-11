@@ -6,14 +6,21 @@ $(() => {
     if (page === "") {initHome();}
     else if (page === "login") {initLogin();}
     else if (page === "register") {initRegister();}
-    else if (page === "profile") {initProfile();}
+    else if (page === "profile") {initProfile(); getNotifications();}
     else if (page === "discover") {initDiscover(); initSearch(); getNotifications();}
-    else if (page === "mymatches") {initMatches(); initSearch();}
+    else if (page === "mymatches") {initMatches(); initSearch(); getNotifications();}
     
 });
 
 function getNotifications(){
     //Check for new notifications every minute
+
+    var heatAlert   = document.getElementById("alert-heat").innerHTML;
+    var alertHeatTemplate = Handlebars.compile(heatAlert);
+
+    var matchesAlert   = document.getElementById("alert-matches").innerHTML;
+    var alertMatchesTemplate = Handlebars.compile(matchesAlert);
+
     $.ajax({
         url: ROOTURL + '/api/notifications/',
         type: "GET",
@@ -23,23 +30,27 @@ function getNotifications(){
         },
         success: (data, status) => {
             if (status) {
-                debug = true;
+
+                //Set Debug to true to see some examples
+                debug = false;
+
                 //If you have new heats generate alert
                 if(debug || data.newheats > 0){
-                   $('.page-content').prepend('<div class="alert alert-success"><strong>You have recieved ' + data.newheats + ' new heats!</strong></div>');
+                   //$('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
                    console.log("You have new heats!");
                 }
                 
                 //You have a new match generate alert
                 if(debug || data.newmatches > 0){
                     console.log("You have new matches!");
-                    $('.page-content').prepend('<div class="alert alert-success"><strong>You have ' + newmatches + ' new matches! </strong> You should <a href="' + ROOTURL + '/mymatches' + '" class="alert-link">checkout your new matches!</a>.</div>');
+                    $('#allalerts').prepend(alertMatchesTemplate({"newmatches" : data.newmatches, "nurl" :  ROOTURL + '/mymatches'}));
                 } 
 
                 console.log(data);
             }
         }
     }).always(function(){
+        //Every minute check for new notifications
         setTimeout(getNotifications,60000);
    });
 

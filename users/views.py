@@ -218,6 +218,27 @@ def apiRegister(request):
             print(uform)
             print(pform)
 
+            #Welcome Email Details
+            firstName = user.first_name
+            lastName = user.last_name
+            email = user.email
+            subject = 'Thank you for registering with MatchMaker!'
+            fromemail = 'no-reply@neshanthan.com'
+
+            context = {
+                'firstName' : firstName,
+                'lastName' : lastName
+            }
+
+            #Send Email to user when new heat recieved
+            send_mail(
+                subject,
+                render_to_string('emails/welcome.txt', context),
+                fromemail,
+                [email],
+                fail_silently=False,
+            )
+
             return JsonResponse({"success": True, "redirect": "login/"})
         else:
             print("not valid")

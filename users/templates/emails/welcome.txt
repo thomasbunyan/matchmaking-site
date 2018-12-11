@@ -1,0 +1,7 @@
+Dear {{ firstName }} {{ lastName }},
+
+Thank you for registering an account with us, we hope you have you find the right match!
+
+Regards,
+
+MatchMaker (University Web Programming Project)

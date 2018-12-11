@@ -16,6 +16,13 @@ def discover(request):
     }
     return render(request, 'matchmaker/discover.html', context)
 
+@login_required
+def matches(request):
+    context = {
+        'profiles': Profile.objects.all()
+    }
+    return render(request, 'matchmaker/matches.html', context)
+
 @ensure_csrf_cookie
 def register(request):
     if request.user.is_authenticated:

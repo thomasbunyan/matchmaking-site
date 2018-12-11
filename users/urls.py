@@ -11,4 +11,5 @@ urlpatterns = [
     path('hobbies/', api_views.apiHobbies, name="api-hobbies"),
     path('register/', api_views.apiRegister, name="api-register"),
     path('login/', api_views.apiLogin, name="api-login"),
+    path('notifications/', api_views.apiNotifications, name="api-notifications"),
 ]

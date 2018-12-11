@@ -1,0 +1,57 @@
+{% extends 'matchmaker/base.html' %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <title>My Matches</title>
+    {% include 'matchmaker/widgets/profile.html' %}
+    {% endblock %}
+</head>
+
+<body>
+    {% block body %}
+    <div class="search-area shadow p-4 mt-5 bg-white rounded" style="width: 50%; margin: auto;">
+        <h4>Filter</h4>
+        <div class="filter">
+            <form action="" id="search" class="main-form">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="minAge">Minimum Age:</label>
+                            <input type="number" name="minAge" id="minAge" class="form-control">
+                            <div id="errorMinAge" class="invalid-feedback">Invalid Minimum Age</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="maxAge">Maximum Age:</label>
+                            <input type="number" name="maxAge" id="maxAge" class="form-control">
+                            <div id="errorMaxAge" class="invalid-feedback">Invalid Maximum Age</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select class="form-control" name="gender" id="gender">
+                                <option value="">Male or Female</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                              </select>
+                            <div id="errorGender" class="invalid-feedback">Invalid Gender</div>
+                        </div>
+                    </div>
+    
+                </div>
+                <div class="text-center">
+                    <input id="filterButton" type="button" class="btn btn-primary " value="Filter">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="profile-block" class="profiles p-3 d-flex flex-row flex-wrap justify-content-center">
+    </div>
+    {% endblock %}
+</body>
+
+</html>

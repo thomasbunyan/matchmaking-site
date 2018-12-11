@@ -18,6 +18,10 @@
   <link rel="stylesheet" type="text/css" href="{% static 'matchmaker/main.css' %}" />
   <script src="{% static 'matchmaker/main.js' %}"></script>
   <script src="{% static 'matchmaker/handlebars.js' %}"></script>
+  {% block alerts %}
+  {% include 'matchmaker/widgets/alertHeat.html' %}
+  {% include 'matchmaker/widgets/alertMatches.html' %}
+  {% endblock %}
   {% block head %}
   <title>CHANGE ME</title>
   {% endblock %}
@@ -31,6 +35,7 @@
           {% if user.is_authenticated %}
           <li class="nav-item"><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
           <li class="nav-item"><a href="{% url 'matchmaker-discover' %}" class="nav-link">Discover</a></li>
+          <li class="nav-item"><a href="{% url 'matchmaker-matches' %}" class="nav-link">My Matches</a></li>
           {% endif %}
         </ul>
       </div>
@@ -48,6 +53,8 @@
         </ul>
       </div>
     </nav>
+    <div id="allalerts">
+    </div>
     {% block body %}
     {% endblock %}
   </div>

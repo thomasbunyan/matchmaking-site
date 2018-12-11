@@ -65,15 +65,10 @@ def apiProfile(request, userid = None):
                 profile = User.objects.get(id=userid).profile
                 #Increase counter every time you make call to get individual profile if not user
                 profile.views = profile.views+1
-                newHeats = None
+                #Save user changes
+                profile.save()
             else:
                 profile = User.objects.get(id=request.user.id).profile
-                #If user then change prevHeats and tell user how many new ones since last time
-                newHeats = profile.user_heat.count()-profile.prevHeat
-                profile.prevHeat = profile.user_heat.count()
-
-            #Save user changes
-            profile.save()
 
             hobbies = []
 
@@ -105,10 +100,12 @@ def apiProfile(request, userid = None):
 
         #Update your profile
         if request.method == "PUT":
+
+            request.PUT = QueryDict(request.body)
             
-            u_form = UserUpdateForm(request.POST, instance=request.user)
+            u_form = UserUpdateForm(request.PUT, instance=request.user)
             p_form = ProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.profile)
+            request.PUT, request.FILES, instance=request.user.profile)
 
             if u_form.is_valid() and p_form.is_valid():
                 u_form.save()
@@ -276,6 +273,24 @@ def apiRegister(request):
         return JsonResponse({"success": False})
 
 @login_required
+def apiNotifications(request):
+    profile = User.objects.get(id=request.user.id).profile
+    #If user then change prevHeats and tell user how many new ones since last time
+    newHeats = profile.user_heat.count()-profile.prevHeat
+    profile.prevHeat = profile.user_heat.count()
+
+    #Newmatches
+    newMatches = profile.newMatches
+    profile.newMatches = 0
+
+    profile.save()
+
+    return JsonResponse({"newheats": newHeats, "newmatches": newMatches})
+    
+
+
+
+@login_required
 def apiProfileIDHeat(request):
     if request.method == "POST":
         #request.PUT = QueryDict(request.body)
@@ -283,7 +298,15 @@ def apiProfileIDHeat(request):
             username = request.POST['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
+            
+            #If the user being liked likes the person liking him then add new like notification on both
+            if request.user.profile in profile.user_heat: 
+                request.user.profile.newMatches += 1
+                profile.newMatches += 1 
+
+            #Save Changes
             request.user.profile.save()
+            profile.save()
 
             #Email Details
             firstName = profile.user.first_name

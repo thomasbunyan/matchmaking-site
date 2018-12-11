@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProfileUpdateCreate
-from .models import Profile, Hobby
+from .models import User, Profile, Hobby
 
 from datetime import date
 from django.utils.timezone import now
@@ -45,7 +45,6 @@ def profile(request):
 
     return render(request, 'users/profile.html', context)
 
-
 def apiLogin(request):
     if request.method == 'POST':
         user = authenticate(username=request.POST.get(
@@ -56,24 +55,47 @@ def apiLogin(request):
         else:
             return JsonResponse({"success": False})
 
+#Get individual profiles by specifying the ID, specifiying nothing will return own profile
+@login_required
+def apiProfile(request, userid = None):
+    try:
+        if request.method == "GET":
+            if userid:
+                profile = User.objects.get(id=userid).profile
+                #Increase counter every time you make call to get individual profile if not user
+                profile.views = profile.views+1
+            else:
+                profile = User.objects.get(id=request.user.id).profile
+                #If user then change prevHeats and tell user how many new ones since last time
+                newHeats = profile.user_heat.count()-profile.prevHeat
+                profile.prevHeat = profile.user_heat.count()
 
-def apiProfile(request):
-    if request.method == "GET":
-        res = Profile.objects.filter(user=request.user.id)
+            #Save user changes
+            profile.save()
 
-        #Increase counter every time you make call to get individual profile if not user
-        res.views = res.views+1
+            hobbies = []
 
-        #If user then change prevHeats and tell user how many new ones since last time
-        newHeats = res.user_heat.count()-res.prevHeat
-        res.prevHeat = res.user_heat.count()
+            for hobby in profile.hobbies.all():
+                hobbies.append(hobby.name)
 
+            jsonProduct = { 'id' : profile.user.id,
+                                'image': '/media/' + str(profile.image),
+                                'firstname': profile.user.first_name,
+                                'lastname' : profile.user.last_name,
+                                'dob' : profile.dob.strftime('%Y-%m-%d'),
+                                'gender' : profile.gender,
+                                'location': profile.location,
+                                'description' : profile.description,
+                                'adjectives' : profile.adjectives,
+                                'views' : str(profile.views),             
+            }
 
-        res.save()
+            jsonProduct['hobbies'] = hobbies
 
-        res = serializers.serialize('json', res)
-        return HttpResponse(res, content_type="application/json")
-
+            jsonData = json.dumps(jsonProduct)
+            return HttpResponse(jsonData, content_type="application/json")
+    except:
+        return JsonResponse({"success": False})
     return JsonResponse({"success": False})
 
 @login_required

@@ -87,7 +87,8 @@ def apiProfile(request, userid = None):
                                 'location': profile.location,
                                 'description' : profile.description,
                                 'adjectives' : profile.adjectives,
-                                'views' : str(profile.views),             
+                                'views' : str(profile.views),    
+                                'heat'  : profile.user_heat.count()     
             }
 
             jsonProduct['hobbies'] = hobbies

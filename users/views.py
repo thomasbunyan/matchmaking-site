@@ -112,8 +112,15 @@ def apiProfiles(request):
         minAge = request.GET.get('minAge')
         maxAge = request.GET.get('maxAge')
         gender = request.GET.get('gender')
-        
-        res = Profile.objects.exclude(user=request.user.id)
+
+        #If set will return only the people you are matching with that like you back
+        matches = request.GET.get('matches')
+
+        if matches:
+            res = request.user.profile.user_heat.all() & request.user.profile.heat.all()
+        else:
+            res = Profile.objects.exclude(user=request.user.id)
+
         if minAge:
             minAge = int(minAge)
             min_date = date(current.year - minAge, current.month, current.day)

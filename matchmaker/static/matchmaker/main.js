@@ -8,7 +8,7 @@ $(() => {
     else if (page === "register") {initRegister();}
     else if (page === "profile") {initProfile();}
     else if (page === "discover") {initDiscover(); initSearch(); getNotifications();}
-    else if (page === "matches") {initMatches(); initSearch();}
+    else if (page === "mymatches") {initMatches(); initSearch();}
     
 });
 
@@ -26,10 +26,8 @@ function getNotifications(){
                 debug = true;
                 //If you have new heats generate alert
                 if(debug || data.newheats > 0){
-                   $('page-content').insertBefore('<div class="alert alert-success"><strong>Success!</strong> You should <a href="#" class="alert-link">read this message</a>.</div>');
-                   console.log("You have new heats!");
-                   console.log($('page-content').insertBefore());     
-                }
+                   $('.page-content').prepend('<div class="alert alert-success"><strong>Success!</strong> You should <a href="#" class="alert-link">read this message</a>.</div>');
+                   console.log("You have new heats!");                }
                 
                 //You have a new match generate alert
                 if(debug || data.newmatches > 0){
@@ -167,7 +165,6 @@ function initMatches(minAge, maxAge, gender){
 }
 
 function initDiscover(minAge, maxAge, gender) {
-    console.log("Discover");
     getProfiles(minAge, maxAge, gender, null)
 }
 

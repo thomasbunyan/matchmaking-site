@@ -18,17 +18,22 @@ function getNotifications(){
         url: ROOTURL + '/api/notifications/',
         type: "GET",
         data: "json",
+        headers: {
+            'X-CSRFToken': getCookie("csrftoken"),
+        },
         success: (data, status) => {
             if (status) {
-
+                debug = true;
                 //If you have new heats generate alert
-                if(data.newheats > 0){
-                   console.log("You have new heats!")     
+                if(debug || data.newheats > 0){
+                   $('page-content').insertBefore('<div class="alert alert-success"><strong>Success!</strong> You should <a href="#" class="alert-link">read this message</a>.</div>');
+                   console.log("You have new heats!");
+                   console.log($('page-content').insertBefore());     
                 }
                 
                 //You have a new match generate alert
-                if(data.newmatches > 0){
-                    console.log("You have new matches!")   
+                if(debug || data.newmatches > 0){
+                    console.log("You have new matches!");
                 } 
 
                 console.log(data);

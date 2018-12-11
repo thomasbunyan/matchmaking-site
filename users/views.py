@@ -65,15 +65,10 @@ def apiProfile(request, userid = None):
                 profile = User.objects.get(id=userid).profile
                 #Increase counter every time you make call to get individual profile if not user
                 profile.views = profile.views+1
-                newHeats = None
+                #Save user changes
+                profile.save()
             else:
                 profile = User.objects.get(id=request.user.id).profile
-                #If user then change prevHeats and tell user how many new ones since last time
-                newHeats = profile.user_heat.count()-profile.prevHeat
-                profile.prevHeat = profile.user_heat.count()
-
-            #Save user changes
-            profile.save()
 
             hobbies = []
 
@@ -273,7 +268,15 @@ def apiNotifications(request):
     #If user then change prevHeats and tell user how many new ones since last time
     newHeats = profile.user_heat.count()-profile.prevHeat
     profile.prevHeat = profile.user_heat.count()
+
+    #Newmatches
+    newMatches = profile.newMatches
+    profile.newMatches = 0
+
     profile.save()
+
+    return JsonResponse({"newheats": newHeats, "newmatches": newMatches})
+    
 
 
 
@@ -285,9 +288,15 @@ def apiProfileIDHeat(request):
             username = request.POST['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
-            request.user.profile.save()
+            
+            #If the user being liked likes the person liking him then add new like notification on both
+            if request.user.profile in profile.user_heat: 
+                request.user.profile.newMatches += 1
+                profile.newMatches += 1 
 
-            #if profile.user_heat.
+            #Save Changes
+            request.user.profile.save()
+            profile.save()
 
             #Email Details
             firstName = profile.user.first_name

@@ -31,7 +31,7 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    # Just increasing view counter on viewing profile here, need to do it for ajax aswell
+    # Just increasing view counter on viewing profile here, need to do it for ajax as well
     request.user.profile.views = request.user.profile.views+1
     request.user.save()
 
@@ -55,13 +55,22 @@ def apiLogin(request):
         else:
             return JsonResponse({"success": False})
 
-# Get individual profiles by specifying the ID, specifiying nothing will return own profile
+# Get individual profiles by specifying the ID, specifying nothing will return own profile
 
 
 @login_required
 def apiProfile(request, userid=None):
     try:
-        # Get Individual Profiles or Current profile
+        
+        # Uploading profile pics required a seprate HTTP endpoint, due to file encoding. 
+        if request.method == "POST":
+            profile = User.objects.get(id=request.user.id).profile
+            image = request.FILES['file-0']
+            profile.image = image
+            profile.save()
+            return JsonResponse({"success": True})
+
+        # Get Individual Profiles or Current profile    
         if request.method == "GET":
             if userid:
                 profile = User.objects.get(id=userid).profile
@@ -92,8 +101,8 @@ def apiProfile(request, userid=None):
 
             jsonProduct['hobbies'] = hobbies
 
-            # Use newheats to notify user within app of new heat alerts
             # !!!!!!!!!!!!!! newHeats doesn't exist.!!!!!!!!!!!!!!!!
+            # Use newheats to notify user within app of new heat alerts
             # if newHeats != None:
             #     jsonProduct['newheats'] = newHeats
 
@@ -105,6 +114,8 @@ def apiProfile(request, userid=None):
             request.PUT = QueryDict(request.body)  
             hobbyPks = request.PUT.getlist('hobbies[]')
             hobbies = Hobby.objects.filter(pk__in=hobbyPks)
+
+            print(request.FILES)
 
             u_form = UserUpdateForm(request.PUT, instance=request.user)
             p_form = ProfileUpdateForm(

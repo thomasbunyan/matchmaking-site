@@ -45,8 +45,8 @@ function getNotifications() {
                     console.log("You have new matches!");
                     $('#allalerts').prepend(alertMatchesTemplate({ "newmatches": data.newmatches, "nurl": ROOTURL + '/mymatches' }));
                 }
-
-                console.log(data);
+                // ? This was annoying me :)
+                // console.log(data);
             }
         }
     }).always(function () {
@@ -158,9 +158,12 @@ function initProfile() {
         data: "json",
         success: (data, status) => {
             if (status) {
-                console.log(data);
+                $('#tFirstName').text(data.firstname);
+                $('#tLastName').text(data.lastname);
                 $('#first_name')[0].value = data.firstname;
                 $('#last_name')[0].value = data.lastname;
+                $('#tViews').text(data.views);
+                $('#tHeat').text(data.heat);
                 $('#email')[0].value = data.email;
                 $('#gender')[0].value = data.gender;
                 $('#description')[0].value = data.description;
@@ -221,7 +224,7 @@ function initProfile() {
             dob: form.dob,
             adjectives: form.adjective1.replace(/ /g, '') + "," + form.adjective2.replace(/ /g, '') + "," + form.adjective3.replace(/ /g, ''),
             hobbies: updateHobbies,
-            image: $('#profile-picture').attr("src")
+            // image: $('#profile-picture').attr("src")
         }
         console.log(update);
         $.ajax({
@@ -232,23 +235,43 @@ function initProfile() {
             dataType: "json",
             success: (data, status) => {
                 if (status) {
-                    console.log(data)
+                    // console.log(data)
+                    $('#tFirstName').text(update.first_name);
+                    $('#tLastName').text(update.last_name);
                 }
             }
         });
     });
 }
 
-function uploadFile() {
-    var picture = $('#profile-picture')[0];
-    var file = $('#profile-picture-input')[0].files[0];
-    var fileReader = new FileReader();
-    fileReader.onloadend = function () {
-        picture.src = fileReader.result;
-    }
-    if (file) {
-        fileReader.readAsDataURL(file);
-    }
+function uploadProfileImage() {
+    var data = new FormData();
+    $.each($('#profile-picture-input')[0].files, function (i, file) {
+        data.append('file-' + i, file);
+    });
+    $.ajax({
+        url: ROOTURL + '/api/profile/',
+        data: data,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        success: function (data) {
+            if (data.success) {
+                var picture = $('#profile-picture')[0];
+                var file = $('#profile-picture-input')[0].files[0];
+                var fileReader = new FileReader();
+                fileReader.onloadend = function () {
+                    picture.src = fileReader.result;
+                }
+                if (file) {
+                    fileReader.readAsDataURL(file);
+                }
+            }
+        }
+    });
 }
 
 function addHobbyButtonListeners(hobbies) {

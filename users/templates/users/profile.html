@@ -14,22 +14,24 @@
         <div class="profile-top shadow p-4 mt-5 bg-white rounded d-flex" style="width:48rem; margin:auto">
             <div class="media">
                 <div class="rounded-circle" style="height:150px; width:150px;position:relative">
-                    <img class="rounded-circle" id="profile-picture" src="" height="150" width="150" style="object-fit: cover; position:absolute">
+                    <img class="rounded-circle" id="profile-picture" src="../../../media/default.jpg" height="150"
+                        width="150" style="object-fit: cover; position:absolute">
                     <label class="rounded-circle image-overlay" style="height:150px; width:150px; position:absolute">
                         <label for="profile-image">
                             <i id="editProfileImage" class="fas fa-user-edit" style="cursor: pointer;"></i>
-                            <input id="profile-picture-input" type="file" onchange="uploadFile()" style="display: none;"></input>
+                            <input id="profile-picture-input" type="file" accept="image/*" onchange=" uploadProfileImage()"
+                                style="display: none;"></input>
                         </label>
                     </label>
                 </div>
             </div>
             <div class="col align-self-center">
-                <h2 class="account-heading text-primary">{{ user.first_name }}</h2>
-                <h2 class="account-heading">{{ user.last_name }}</h2>
+                <h2 id="tFirstName" class="account-heading text-primary">firstname</h2>
+                <h2 id="tLastName" class="account-heading">lastname</h2>
             </div>
             <div class="col text-center align-self-center">
-                <h4 class="">Views: <span>{{ views }}</span></h4>
-                <h4 class="">Hotness: <span>{{ heat }}</span></h4>
+                <h4 class="">Views: <span id="tViews">views</span></h4>
+                <h4 class="">Hotness: <span id="tHeat">heat</span></h4>
             </div>
         </div>
     </div>
@@ -42,19 +44,19 @@
                     <div class="form-group">
                         <label for="first_name">First name:</label>
                         <input type="text" name="first_name" id="first_name" class="form-control" autocomplete="first_name"
-                            placeholder="e.g. John">
+                            placeholder="e.g. John" maxlength="40">
                         <div id="errorFirstName" class="invalid-feedback">Invalid first name</div>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Last name:</label>
                         <input type="text" name="last_name" id="last_name" class="form-control" autocomplete="last_name"
-                            placeholder="e.g. Smith">
+                            placeholder="e.g. Smith" maxlength="40">
                         <div id="errorLastName" class="invalid-feedback">Invalid last name</div>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Email:</label>
                         <input type="email" name="email" id="email" class="form-control" autocomplete="email"
-                            placeholder="e.g. johnsmith@email.com">
+                            placeholder="e.g. johnsmith@email.com" maxlength="60">
                         <div id="errorEmail" class="invalid-feedback">Invalid email</div>
                     </div>
                     <div class="form-group">
@@ -74,7 +76,7 @@
                     <div class="form-group">
                         <label for="location">Location:</label>
                         <input type="text" name="location" id="location" class="form-control" autocomplete="location"
-                            placeholder="e.g. London">
+                            placeholder="e.g. London" maxlength="50">
                         <div id="errorLocation" class="invalid-feedback">Invalid location</div>
                     </div>
                     <div class="form-group">
@@ -101,11 +103,11 @@
                         <label for="adjectives">Adjectives (Add a few words to describe yourself):</label>
                         <div class="text-center d-flex justify-content-between">
                             <input type="text" name="adjective1" id="adjective1" class="form-control" autocomplete="adjectives"
-                                style="width:32%" placeholder="e.g. Attractive">
+                                style="width:32%" placeholder="e.g. Attractive" maxlength="15">
                             <input type="text" name="adjective2" id="adjective2" class="form-control" autocomplete="adjectives"
-                                style="width:32%" placeholder="e.g. Charming">
+                                style="width:32%" placeholder="e.g. Charming" maxlength="15">
                             <input type="text" name="adjective3" id="adjective3" class="form-control" autocomplete="adjectives"
-                                style="width:32%" placeholder="e.g. Ambitious">
+                                style="width:32%" placeholder="e.g. Ambitious" maxlength="15">
                         </div>
                         <div id="errorLocation" class="invalid-feedback">Invalid location</div>
                     </div>

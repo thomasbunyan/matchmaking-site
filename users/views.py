@@ -99,10 +99,12 @@ def apiProfile(request, userid = None):
 
         #Update your profile
         if request.method == "PUT":
+
+            request.PUT = QueryDict(request.body)
             
-            u_form = UserUpdateForm(request.POST, instance=request.user)
+            u_form = UserUpdateForm(request.PUT, instance=request.user)
             p_form = ProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.profile)
+            request.PUT, request.FILES, instance=request.user.profile)
 
             if u_form.is_valid() and p_form.is_valid():
                 u_form.save()

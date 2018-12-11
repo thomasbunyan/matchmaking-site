@@ -30,6 +30,7 @@ class Profile(models.Model):
     adjectives = models.TextField(default="adjective", max_length=400)
     views = models.IntegerField(default=0)
     prevHeat = models.IntegerField(default=0)
+    newMatches = models.IntegerField(default=0)
     heat = models.ManyToManyField(
         related_name='user_heat',
         to='self'   ,

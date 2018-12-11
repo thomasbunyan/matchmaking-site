@@ -268,6 +268,16 @@ def apiRegister(request):
         return JsonResponse({"success": False})
 
 @login_required
+def apiNotifications(request):
+    profile = User.objects.get(id=request.user.id).profile
+    #If user then change prevHeats and tell user how many new ones since last time
+    newHeats = profile.user_heat.count()-profile.prevHeat
+    profile.prevHeat = profile.user_heat.count()
+    profile.save()
+
+
+
+@login_required
 def apiProfileIDHeat(request):
     if request.method == "POST":
         #request.PUT = QueryDict(request.body)
@@ -276,6 +286,8 @@ def apiProfileIDHeat(request):
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
             request.user.profile.save()
+
+            #if profile.user_heat.
 
             #Email Details
             firstName = profile.user.first_name

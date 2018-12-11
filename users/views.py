@@ -59,6 +59,7 @@ def apiLogin(request):
 @login_required
 def apiProfile(request, userid = None):
     try:
+        #Get Individual Profiles or Current profile
         if request.method == "GET":
             if userid:
                 profile = User.objects.get(id=userid).profile
@@ -100,6 +101,19 @@ def apiProfile(request, userid = None):
 
             jsonData = json.dumps(jsonProduct)
             return HttpResponse(jsonData, content_type="application/json")
+
+        #Update your profile
+        if request.method == "PUT":
+            
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile)
+
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                p_form.save()
+                JsonResponse({"success": True, "redirect": "profile/"})                
+
     except:
         return JsonResponse({"success": False})
     return JsonResponse({"success": False})

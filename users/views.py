@@ -64,6 +64,7 @@ def apiProfile(request, userid = None):
                 profile = User.objects.get(id=userid).profile
                 #Increase counter every time you make call to get individual profile if not user
                 profile.views = profile.views+1
+                newHeats = None
             else:
                 profile = User.objects.get(id=request.user.id).profile
                 #If user then change prevHeats and tell user how many new ones since last time
@@ -92,6 +93,10 @@ def apiProfile(request, userid = None):
             }
 
             jsonProduct['hobbies'] = hobbies
+
+            #Use newheats to notify user within app of new heat alerts
+            if newHeats != None:
+                jsonProduct['newheats'] = newHeats
 
             jsonData = json.dumps(jsonProduct)
             return HttpResponse(jsonData, content_type="application/json")
@@ -261,6 +266,11 @@ def apiProfileIDHeat(request):
             username = delete['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.remove(profile)
+
+            #take away 1 from prevHeat so you will get notfication on new heats
+            profile.prevHeat = profile.prevHeat-1
+            profile.save() 
+
             return JsonResponse({"success": True})
         else:
             return JsonResponse({"success": False})

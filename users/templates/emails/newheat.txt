@@ -1,4 +1,4 @@
-Dear {{ firstName }} {{ LastName }},
+Dear {{ firstName }} {{ lastName }},
 
 You have just recieved some heat, check the website to get more matches!
 

@@ -153,8 +153,9 @@ function initSearch() {
         }
 
         //console.log(form.minAge, form.maxAge, form.gender)
-
-        initDiscover(form.minAge, form.maxAge, form.gender);        
+        const page = window.location.href.split("/")[3];
+        if (page === "discover") {initDiscover(form.minAge, form.maxAge, form.gender);}
+        else if (page === "mymatches") {initMatches(form.minAge, form.maxAge, form.gender);}
         
     });
 }

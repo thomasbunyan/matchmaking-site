@@ -1,1 +1,1 @@
-web: gunicorn matchmaker.wsgi:application --preload --workers 1
+web: gunicorn matchmaking_site.wsgi:application --preload --workers 1

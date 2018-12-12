@@ -99,7 +99,7 @@ function initLogin() {
             }
         });
 
-        console.log(form)
+        // console.log(form)
     });
 }
 
@@ -118,7 +118,7 @@ function initRegister() {
 
         // Need a username, use the email.
         form.username = form.email;
-        console.log("POSTING");
+
         const url = ROOTURL + "/api/register/";
         $.ajax({
             url: url,

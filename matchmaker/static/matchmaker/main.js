@@ -168,9 +168,9 @@ function initProfile() {
                 $('#description')[0].value = data.description;
                 $('#location')[0].value = data.location;
                 $('#dob')[0].value = data.dob;
-                $('#adjective1')[0].value = data.adjectives.split(",")[0];
-                $('#adjective2')[0].value = data.adjectives.split(",")[1];
-                $('#adjective3')[0].value = data.adjectives.split(",")[2];
+                $('#adjective1')[0].value = ((data.adjectives.split(",")[0] == undefined || data.adjectives.split(",")[0] == "adjective") ? '' : data.adjectives.split(",")[0]);
+                $('#adjective2')[0].value = ((data.adjectives.split(",")[1] == undefined || data.adjectives.split(",")[1] == "adjective") ? '' : data.adjectives.split(",")[1]);
+                $('#adjective3')[0].value = ((data.adjectives.split(",")[2] == undefined || data.adjectives.split(",")[2] == "adjective") ? '' : data.adjectives.split(",")[2]);
                 $('#profile-picture').attr("src", data.image);
                 hobbies = data.hobbies;
                 hobbies.forEach(hobby => {
@@ -531,10 +531,11 @@ function validateForm(errors) {
     for (let i = 0; i < errorsClean.length; i++) {
         errorsClean[i] = errorsClean[i].replace(/ *\<[^)]*\> */g, "");
     }
-
+    console.log(errors);
+    console.log(errorsClean);
 
     let err = false;
-    let indexF = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexF = errorsClean.findIndex((e) => { return e == "first_name"; });
     if (indexF != -1) {
         $('#firstname').addClass("is-invalid");
         $('#errorFirstname').text(errorsClean[indexF + 1]);
@@ -542,7 +543,7 @@ function validateForm(errors) {
     } else {
         $('#firstname').removeClass("is-invalid").addClass("is-valid");
     }
-    let indexL = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexL = errorsClean.findIndex((e) => { return e == "last_name"; });
     if (indexL != -1) {
         $('#lastname').addClass("is-invalid");
         $('#errorLastname').text(errorsClean[indexL + 1]);
@@ -558,7 +559,7 @@ function validateForm(errors) {
     } else {
         $('#email').removeClass("is-invalid").addClass("is-valid");
     }
-    let indexD = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexD = errorsClean.findIndex((e) => { return e == "dob"; });
     if (indexD != -1) {
         $('#dob').addClass("is-invalid");
         $('#errorDob').text(errorsClean[indexD + 1]);
@@ -566,7 +567,7 @@ function validateForm(errors) {
     } else {
         $('#dob').removeClass("is-invalid").addClass("is-valid");
     }
-    let indexU = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexU = errorsClean.findIndex((e) => { return e == "email"; });
     if (indexU != -1) {
         $('#email').addClass("is-invalid");
         $('#errorEmail').text("Email address is already registered.");
@@ -574,7 +575,7 @@ function validateForm(errors) {
     } else {
         $('#email').removeClass("is-invalid").addClass("is-valid");
     }
-    let indexP1 = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexP1 = errorsClean.findIndex((e) => { return e == "password1"; });
     if (indexP1 != -1) {
         $('#password').addClass("is-invalid");
         $('#errorPassword').text(errorsClean[indexP1 + 1]);
@@ -582,7 +583,7 @@ function validateForm(errors) {
     } else {
         $('#password').removeClass("is-invalid").addClass("is-valid");
     }
-    let indexP2 = errorsClean.findIndex((e) => { return e == "username"; });
+    let indexP2 = errorsClean.findIndex((e) => { return e == "password2"; });
     if (indexP2 != -1) {
         $('#password2').addClass("is-invalid");
         $('#errorPassword2').text(errorsClean[indexP2 + 1]);

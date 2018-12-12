@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'hidden-bastion-94624.herokuapp.com']
 INSTALLED_APPS = [
     'matchmaker.apps.MatchmakerConfig',
     'users.apps.UsersConfig',
-    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

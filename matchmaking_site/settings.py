@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+ 
 import os
 import django_heroku 
 
@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'hidden-bastion-94624.herokuapp.com']
 INSTALLED_APPS = [
     'matchmaker.apps.MatchmakerConfig',
     'users.apps.UsersConfig',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -22,7 +22,7 @@ class Profile(models.Model):
     )
     gender = models.CharField(default="?", choices=GENDERS, max_length=1)
     description = models.TextField(
-        default="Something about yourself", max_length=200)
+        default="Something about yourself")
     location = models.CharField(default="Town/City", max_length=100)
     dob = models.DateField(null=True)
     hobbies = models.ManyToManyField(

@@ -16,9 +16,9 @@
                 <div class="rounded-circle" style="height:150px; width:150px;position:relative">
                     <img class="rounded-circle" id="profile-picture" src="../../../media/default.jpg" height="150"
                         width="150" style="object-fit: cover; position:absolute">
-                    <label class="rounded-circle image-overlay" style="height:150px; width:150px; position:absolute">
+                    <label class="rounded-circle image-overlay" style="height:150px; width:150px; position:absolute;cursor: pointer;">
                         <label for="profile-image">
-                            <i id="editProfileImage" class="fas fa-user-edit" style="cursor: pointer;"></i>
+                            <i id="editProfileImage" class="fas fa-user-edit"></i>
                             <input id="profile-picture-input" type="file" accept="image/*" onchange=" uploadProfileImage()"
                                 style="display: none;"></input>
                         </label>
@@ -37,30 +37,29 @@
     </div>
     <div class="profile-top shadow p-4 mt-3 bg-white rounded" style="width:48rem; margin:auto; margin-bottom: 200px">
         <form method="POST" enctype="multipart/form-data" id="updateProfile">
-            <!-- {% csrf_token %} -->
             <fieldset class='form-group' style="width:75%; margin: auto">
                 <h3 class="mb-4 text-center">Profile Info</h3>
                 <form acition="" id="updateProfile" class="main-form">
                     <div class="form-group">
-                        <label for="first_name">First name:</label>
+                        <label for="first_name" class="font-weight-bold">First name:</label>
                         <input type="text" name="first_name" id="first_name" class="form-control" autocomplete="first_name"
                             placeholder="e.g. John" maxlength="40">
                         <div id="errorFirstName" class="invalid-feedback">Invalid first name</div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name">Last name:</label>
+                        <label for="last_name" class="font-weight-bold">Last name:</label>
                         <input type="text" name="last_name" id="last_name" class="form-control" autocomplete="last_name"
                             placeholder="e.g. Smith" maxlength="40">
                         <div id="errorLastName" class="invalid-feedback">Invalid last name</div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name">Email:</label>
+                        <label for="last_name" class="font-weight-bold">Email:</label>
                         <input type="email" name="email" id="email" class="form-control" autocomplete="email"
                             placeholder="e.g. johnsmith@email.com" maxlength="60">
                         <div id="errorEmail" class="invalid-feedback">Invalid email</div>
                     </div>
                     <div class="form-group">
-                        <label for="gender">Gender:</label>
+                        <label for="gender" class="font-weight-bold">Gender:</label>
                         <select id="gender">
                             <option value="M">Male</option>
                             <option value="F">Female</option>
@@ -68,24 +67,25 @@
                         <div id="errorGender" class="invalid-feedback">Invalid gender</div>
                     </div>
                     <div class="form-group">
-                        <label for="description">Description about yourself:</label>
+                        <label for="description" class="font-weight-bold">Description about yourself:</label>
                         <textarea type="text" name="description" id="description" class="form-control" rows=3
                             autocomplete="description" style="resize: none;" maxLength=200 placeholder="e.g. I'm interested in..."></textarea>
                         <div id="errorDescription" class="invalid-feedback">Invalid description</div>
                     </div>
                     <div class="form-group">
-                        <label for="location">Location:</label>
+                        <label for="location" class="font-weight-bold">Location:</label>
                         <input type="text" name="location" id="location" class="form-control" autocomplete="location"
                             placeholder="e.g. London" maxlength="50">
                         <div id="errorLocation" class="invalid-feedback">Invalid location</div>
                     </div>
                     <div class="form-group">
-                        <label for="dob">Date of birth:</label>
+                        <label for="dob" class="font-weight-bold">Date of birth:</label>
                         <input type="date" name="dob" id="dob" class="form-control" autocomplete="dob">
                         <div id="errorDOB" class="invalid-feedback">Invalid date of birth</div>
                     </div>
                     <div class="form-group">
-                        <label for="hobbies">Hobbies (Click them to remove or add more from our list):</label>
+                        <label for="hobbies" class="font-weight-bold">Hobbies (Click them to remove or add more from
+                            our list):</label>
                         <div id="picked-hobbies">
                         </div>
                         <div class="input-group mt-3">
@@ -100,7 +100,8 @@
                         <div id="errorHobbies" class="invalid-feedback">Invalid hobbies</div>
                     </div>
                     <div class="form-group">
-                        <label for="adjectives">Adjectives (Add a few words to describe yourself):</label>
+                        <label for="adjectives" class="font-weight-bold">Adjectives (Add a few words to describe
+                            yourself):</label>
                         <div class="text-center d-flex justify-content-between">
                             <input type="text" name="adjective1" id="adjective1" class="form-control" autocomplete="adjectives"
                                 style="width:32%" placeholder="e.g. Attractive" maxlength="15">
@@ -112,11 +113,8 @@
                         <div id="errorLocation" class="invalid-feedback">Invalid location</div>
                     </div>
                 </form>
-                <!-- <h1>YO</h1> -->
-                <!-- {{ u_form.as_p }} -->
-                <!-- {{ p_form.as_p }} -->
             </fieldset>
-            <div class="text-center">
+            <div class="text-center mt-4 mb-3">
                 <input id="updateButton" type="button" class="btn btn-primary " value="Update">
             </div>
         </form>

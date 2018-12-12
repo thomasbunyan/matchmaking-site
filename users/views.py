@@ -246,10 +246,9 @@ def apiHobbies(request):
 def apiRegister(request):
     if request.method == "POST":
         uform = UserRegisterForm(request.POST)
-        pformt = ProfileUpdateCreate(request.POST)
+        pform = ProfileUpdateCreate(request.POST)
         
-        if uform.is_valid() and pformt.is_valid():
-            print("valid")
+        if uform.is_valid() and pform.is_valid():
             uform.save()
             user = uform.instance
             pform = ProfileUpdateCreate(request.POST, instance=user.profile)
@@ -257,8 +256,8 @@ def apiRegister(request):
 
             # pform.user = uform
             # pform.save()
-            print(uform)
-            print(pform)
+            # print(uform)
+            # print(pform)
 
             # Welcome Email Details
             firstName = user.first_name

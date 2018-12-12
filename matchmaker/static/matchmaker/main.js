@@ -108,7 +108,6 @@ function initRegister() {
     console.log("Register");
     $('#registerButton').click(() => {
         let form = getFormData($("#register"));
-        form.csrfmiddlewaretoken = getCookie("csrftoken");
 
         // Validate frontend here.
         let valid = true;
@@ -119,7 +118,7 @@ function initRegister() {
 
         // Need a username, use the email.
         form.username = form.email;
-
+        console.log("POSTING");
         const url = ROOTURL + "/api/register/";
         $.ajax({
             url: url,
@@ -286,7 +285,6 @@ function addHobbyButtonListeners(hobbies) {
 }
 
 function initSearch() {
-    // Register js.
     console.log("Search");
     $('#filterButton').click(() => {
         console.log("Hello World");
@@ -528,44 +526,66 @@ function getFormData($form) {
 
 // Validate profile.
 function validateForm(errors) {
-    if (errors.first_name) {
+    let errorsClean = errors.split("<ul>");
+    errorsClean = errorsClean[0].split("<li>")
+    for (let i = 0; i < errorsClean.length; i++) {
+        errorsClean[i] = errorsClean[i].replace(/ *\<[^)]*\> */g, "");
+    }
+
+
+    let err = false;
+    let indexF = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexF != -1) {
         $('#firstname').addClass("is-invalid");
-        $('#errorFirstname').text(errors.first_name);
+        $('#errorFirstname').text(errorsClean[indexF + 1]);
         err = true;
     } else {
         $('#firstname').removeClass("is-invalid").addClass("is-valid");
     }
-    if (errors.last_name) {
+    let indexL = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexL != -1) {
         $('#lastname').addClass("is-invalid");
-        $('#errorLastname').text(errors.last_name);
+        $('#errorLastname').text(errorsClean[indexL + 1]);
         err = true;
     } else {
         $('#lastname').removeClass("is-invalid").addClass("is-valid");
     }
-    if (errors.email) {
+    let indexE = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexE != -1) {
         $('#email').addClass("is-invalid");
-        $('#errorEmail').text(errors.email);
+        $('#errorEmail').text(errorsClean[indexE + 1]);
         err = true;
     } else {
         $('#email').removeClass("is-invalid").addClass("is-valid");
     }
-    if (errors.username) {
+    let indexD = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexD != -1) {
+        $('#dob').addClass("is-invalid");
+        $('#errorDob').text(errorsClean[indexD + 1]);
+        err = true;
+    } else {
+        $('#dob').removeClass("is-invalid").addClass("is-valid");
+    }
+    let indexU = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexU != -1) {
         $('#email').addClass("is-invalid");
         $('#errorEmail').text("Email address is already registered.");
         err = true;
     } else {
         $('#email').removeClass("is-invalid").addClass("is-valid");
     }
-    if (errors.password1) {
+    let indexP1 = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexP1 != -1) {
         $('#password').addClass("is-invalid");
-        $('#errorPassword').text(errors.password1);
+        $('#errorPassword').text(errorsClean[indexP1 + 1]);
         err = true;
     } else {
         $('#password').removeClass("is-invalid").addClass("is-valid");
     }
-    if (errors.password2) {
+    let indexP2 = errorsClean.findIndex((e) => { return e == "username"; });
+    if (indexP2 != -1) {
         $('#password2').addClass("is-invalid");
-        $('#errorPassword2').text(errors.password2);
+        $('#errorPassword2').text(errorsClean[indexP2 + 1]);
         err = true;
     } else {
         $('#password2').removeClass("is-invalid").addClass("is-valid");

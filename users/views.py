@@ -314,8 +314,8 @@ def apiProfileIDHeat(request):
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
             
-            # If the user being liked likes the person liking him then add new like notification on both
-            if request.user.profile in profile.user_heat: 
+            # If the user being liked likes the person liking him then add new match notification on both
+            if request.user.profile in profile.user_heat.all():
                 request.user.profile.newMatches += 1
                 profile.newMatches += 1 
 

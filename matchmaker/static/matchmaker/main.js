@@ -36,13 +36,13 @@ function getNotifications() {
 
                 //If you have new heats generate alert
                 if (debug || data.newheats > 0) {
-                    //$('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
-                    console.log("You have new heats!");
+                    $('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
+                    //console.log("You have new heats!");
                 }
 
                 //You have a new match generate alert
                 if (debug || data.newmatches > 0) {
-                    console.log("You have new matches!");
+                    //console.log("You have new matches!");
                     $('#allalerts').prepend(alertMatchesTemplate({ "newmatches": data.newmatches, "nurl": ROOTURL + '/mymatches' }));
                 }
                 // ? This was annoying me :)

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,17 +27,6 @@ SECRET_KEY = 'i4w_-m-p26sh&ozec09bkmas(@s7z(k297_3_&s+$kpe(rzw%l'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Custom stuff for heroku
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-STATIC_URL = '/static/'
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 # Application definition
@@ -130,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -145,3 +135,5 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = "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"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+django_heroku.settings(locals())

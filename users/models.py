@@ -8,6 +8,10 @@ class Hobby(models.Model):
 
     class Meta:
         verbose_name_plural = "hobbies"
+        unique_together = (('name'),)
+
+    def natural_key(self):
+        return (self.name)
 
     def __str__(self):
         return self.name
@@ -37,6 +41,10 @@ class Profile(models.Model):
         blank=True,
         symmetrical=False
     )
+
+    def natural_key(self):
+        return self.user.natural_key()
+    natural_key.dependencies = ['auth.User', 'users.Hobby']
 
     def __str__(self):
         return self.user.username + "'s profile"

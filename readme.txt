@@ -1,13 +1,7 @@
 #Dumping the data to be used as fixtures do it locally
-python manage.py dumpdata --natural-foreign --natural-primary --exclude=contenttypes --exclude=sessions --exclude=admin --format=json --indent=4 > db.json
+python manage.py dumpdata --natural-foreign --natural-primary --exclude=auth.Permission --exclude=contenttypes --exclude=sessions --exclude=admin --format=json --indent=4 > db.json
 
-python manage.py dumpdata --exclude=contenttypes --exclude=auth.Permission --format=json --indent=4 > db.json
-
-
-heroku run python manage.py shell
-
-
-
+#Manually remove anything you do not want included
 
 //Loading data on the server
 heroku run python manage.py loaddata db.json

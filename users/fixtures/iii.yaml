@@ -14,8 +14,7 @@
         user_permissions: []
 -   model: users.profile
     fields:
-        user: 
-        - [rR123@fmail.com]
+        user: rR123@fmail.com
         image: profile_pics/article-1254606-085A3708000005DC-826_308x425.jpg
         gender: M
         description: "I\u2019m a creature of contradictions\u2014An athletic bookworm,

@@ -21,10 +21,6 @@ class Hobby(models.Model):
     def __str__(self):
         return self.name
 
-class ProfileTypeManager(models.Manager):
-    def get_by_natural_key(self, user):
-        return self.get(user=user)
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default="default.jpg", upload_to='profile_pics')
@@ -49,8 +45,6 @@ class Profile(models.Model):
         blank=True,
         symmetrical=False
     )
-
-    objects = ProfileTypeManager()
 
     def natural_key(self):
         return self.user.natural_key()

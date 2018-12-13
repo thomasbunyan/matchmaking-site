@@ -1,5 +1,16 @@
 //Global Root URL no trailing slash - add slash if using root url
-const ROOTURL = window.location.protocol + "//" + window.location.host
+const ROOTURL = window.location.protocol + "//" + window.location.host;
+
+//Make Global for template files to so only compiled once
+$(document).ready(function() {
+    let profiles = document.getElementById("profiles-template").innerHTML;
+    window.pstemplate = Handlebars.compile(profiles);
+    let heatAlert = document.getElementById("alert-heat").innerHTML;
+    window.alertHeatTemplate = Handlebars.compile(heatAlert);
+    let matchesAlert = document.getElementById("alert-matches").innerHTML;
+    window.alertMatchesTemplate = Handlebars.compile(matchesAlert);
+});
+
 
 $(() => {
     const page = window.location.href.split("/")[3];
@@ -14,13 +25,6 @@ $(() => {
 
 function getNotifications() {
     //Check for new notifications every minute
-
-    var heatAlert = document.getElementById("alert-heat").innerHTML;
-    var alertHeatTemplate = Handlebars.compile(heatAlert);
-
-    var matchesAlert = document.getElementById("alert-matches").innerHTML;
-    var alertMatchesTemplate = Handlebars.compile(matchesAlert);
-
     $.ajax({
         url: ROOTURL + '/api/notifications/',
         type: "GET",
@@ -36,14 +40,14 @@ function getNotifications() {
 
                 //If you have new heats generate alert
                 if (debug || data.newheats > 0) {
-                    $('#allalerts').prepend(alertHeatTemplate({"newmatches" : data.newheats}));
+                    $('#allalerts').prepend(window.alertHeatTemplate({"newmatches" : data.newheats}));
                     //console.log("You have new heats!");
                 }
 
                 //You have a new match generate alert
                 if (debug || data.newmatches > 0) {
                     //console.log("You have new matches!");
-                    $('#allalerts').prepend(alertMatchesTemplate({ "newmatches": data.newmatches, "nurl": ROOTURL + '/mymatches' }));
+                    $('#allalerts').prepend(window.alertMatchesTemplate({ "newmatches": data.newmatches, "nurl": ROOTURL + '/mymatches' }));
                 }
                 // ? This was annoying me :)
                 // console.log(data);
@@ -314,7 +318,9 @@ function initDiscover(minAge, maxAge, gender) {
     getProfiles(minAge, maxAge, gender, null)
 }
 
+
 function getProfiles(minAge, maxAge, gender, matches) {
+
     console.log("get Profiles");
     const date = new Date();
     const csrf = getCookie("csrftoken");
@@ -350,11 +356,9 @@ function getProfiles(minAge, maxAge, gender, matches) {
         success: (data, status) => {
             if (status) {
 
-                console.log(data);
-                var profile = document.getElementById("profile-template").innerHTML;
-                var template = Handlebars.compile(profile);
+                
 
-                document.getElementById("profile-block").innerHTML = template(data);
+                document.getElementById("profile-block").innerHTML = window.pstemplate(data);
 
                 $('.profile-card').click((e) => {
                     const id = e.currentTarget.id + "Modal"
@@ -362,7 +366,6 @@ function getProfiles(minAge, maxAge, gender, matches) {
                 });
 
                 addAllFuncs();
-
 
             }
         }
@@ -390,6 +393,17 @@ function getProfiles(minAge, maxAge, gender, matches) {
             addAllFuncs();
             removeHeat(e);
         });
+    }
+
+    function profileView(id){
+        //Using head because not all data needs to be returned
+        $.ajax({
+            url: ROOTURL + "/api/profile/" + id + "/",
+            type: "GET",
+            data: "json",
+        });
+
+
     }
 
 

@@ -1,5 +1,54 @@
 [
 {
+    "model": "users.hobby",
+    "fields": {
+        "name": "Football",
+        "description": "#1 sport in the world"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Baking",
+        "description": "Good way to relax"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Drinking",
+        "description": "For a real connoisseur"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Watching movies",
+        "description": "Cinema fanatic!"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Drawing",
+        "description": "Art stuff"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Programming",
+        "description": "Coding is Fun!"
+    }
+},
+{
+    "model": "users.hobby",
+    "fields": {
+        "name": "Exploring",
+        "description": "Explore outdoor and go for an adventure."
+    }
+},
+{
     "model": "auth.user",
     "fields": {
         "password": "pbkdf2_sha256$120000$hmJ29OvFdlnQ$7trMRhqBqJwYJfNct1Heizg7p86aus8IHM/5xKr51SU=",
@@ -386,6 +435,23 @@
         "is_staff": false,
         "is_active": true,
         "date_joined": "2018-11-15T14:28:59Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$3sTgqokQOg7W$NonIhEW/7DF5hm7pZkO1wNgVs+WKlycma+hoYNhZGYs=",
+        "last_login": "2018-12-12T16:55:54.971Z",
+        "is_superuser": true,
+        "username": "neshanthan",
+        "first_name": "Neshanthan",
+        "last_name": "Annalingam",
+        "email": "neshanthan.a@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-11-15T15:56:16.623Z",
         "groups": [],
         "user_permissions": []
     }

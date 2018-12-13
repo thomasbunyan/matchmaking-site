@@ -2,20 +2,28 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class HobbyTypeManager(models.Manager):
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 class Hobby(models.Model):
     name = models.CharField(default="hobbyName", max_length=100)
     description = models.TextField(default="hobbyDesc", max_length=100)
+    objects = HobbyTypeManager()
 
     class Meta:
         verbose_name_plural = "hobbies"
         unique_together = (('name'),)
 
     def natural_key(self):
-        return (self.name)
+        return (self.name,)
 
     def __str__(self):
         return self.name
 
+class ProfileTypeManager(models.Manager):
+    def get_by_natural_key(self, user):
+        return self.get(user=user)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -41,6 +49,8 @@ class Profile(models.Model):
         blank=True,
         symmetrical=False
     )
+
+    objects = ProfileTypeManager()
 
     def natural_key(self):
         return self.user.natural_key()

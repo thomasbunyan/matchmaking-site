@@ -44,6 +44,29 @@
         - [gimmyHC@kmail.com]
 -   model: users.profile
     fields:
+        user: [neshanthan]
+        image: profile_pics/profilepic.jpg
+        gender: M
+        description: Nothing Much!
+        location: Norway
+        dob: 2000-01-30
+        adjectives: Computer Scientist
+        views: 110
+        prevHeat: 3
+        newMatches: 0
+        hobbies:
+        - [Football]
+        - [Drinking]
+        heat:
+        - [admin]
+        - [n.GOLD@email.com]
+        - [welbeck.d97@email.com]
+        - [tou.dan1987@neshanthan.com]
+        - [cc_sweetnTasty@email.com]
+        - [ticktalk@email.com]
+        - [anny_k@neshanthan.com]
+-   model: users.profile
+    fields:
         user: [j.s@neshanthan.com]
         image: profile_pics/Liam-Hemsworth.jpg
         gender: M

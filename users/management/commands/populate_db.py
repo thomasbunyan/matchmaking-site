@@ -21,11 +21,15 @@ class Command(BaseCommand):
         usersfilepath = os.path.join(mainpath, 'users.yaml')
 
         #Reset All data
+        Print("Resetting All Data")
+        management.call_command('flush', verbosity=0, interactive=False)
 
         #Create the users
+        Print("Creating all user accounts")
         management.call_command('loaddata', usersfilepath, verbosity=0)
 
         #Create the hobbies
+        Print("Creating all hobbies")
         management.call_command('loaddata', hobbiesfilepath, verbosity=0)
 
         #Load up the hobbies
@@ -60,11 +64,8 @@ class Command(BaseCommand):
                     user.profile.heat.add(heateduser.profile)
                     
                 user.save()
-                print(user)
+                print("Modified profile for User: " + usernk)
                 
-                
-
-
 
     def handle(self, *args, **options):
         self._create_data()

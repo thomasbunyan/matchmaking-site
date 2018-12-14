@@ -14,6 +14,20 @@
         user_permissions: []
 -   model: auth.user
     fields:
+        password: pbkdf2_sha256$120000$3sTgqokQOg7W$NonIhEW/7DF5hm7pZkO1wNgVs+WKlycma+hoYNhZGYs=
+        last_login: 2018-12-13 20:15:04.883824+00:00
+        is_superuser: true
+        username: neshanthan
+        first_name: Neshanthan
+        last_name: Annalingam
+        email: neshanthan.a@gmail.com
+        is_staff: true
+        is_active: true
+        date_joined: 2018-11-15 15:56:16.623459+00:00
+        groups: []
+        user_permissions: []
+-   model: auth.user
+    fields:
         password: pbkdf2_sha256$120000$klaU10jgLIvk$0nZyw4dgnF+UNi1ccJIg2q/GcOQh73GtroMcblC0AXc=
         last_login: null
         is_superuser: false

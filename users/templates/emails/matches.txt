@@ -1,0 +1,7 @@
+Dear {{ firstName }} {{ lastName }},
+
+You just got matched with someone! Log in now to see who it is!
+
+Regards,
+
+MatchMaker (University Web Programming Project)

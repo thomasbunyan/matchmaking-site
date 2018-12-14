@@ -20,3 +20,6 @@ User.objects.get_by_natural_key('importtest@tmail1.com')
 
 #Load the fixtures using
 heroku run python manage.py populate_db
+
+#To install all dependencies used
+pip install -r requirements.txt

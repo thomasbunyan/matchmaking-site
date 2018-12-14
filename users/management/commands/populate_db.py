@@ -55,8 +55,8 @@ class Command(BaseCommand):
                 user.profile.newMatches = profile["fields"]["newMatches"]
 
                 #For hobbies listed set it on user
-                for hobby in profile["fields"]["hobbies"][0]:
-                    user.profile.hobbies.add(allHobbies[hobby])
+                for hobby in profile["fields"]["hobbies"]:
+                    user.profile.hobbies.add(allHobbies[hobby[0]])
 
                 #For All heated users add
                 for heated in profile["fields"]["heat"]:

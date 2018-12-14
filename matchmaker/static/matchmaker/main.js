@@ -4,12 +4,12 @@ const ROOTURL = window.location.protocol + "//" + window.location.host;
 //Make Global for template files to so only compiled once
 $(() => {
     window.page = window.location.href.split("/")[3];
-    if(window.page === "discover" || window.page === "mymatches"){
+    if (window.page === "discover" || window.page === "mymatches") {
         let profiles = document.getElementById("profiles-template").innerHTML;
         window.pstemplate = Handlebars.compile(profiles);
     }
     //Alerts will be on all logged in pages
-    if(window.page !== "login" && window.page !== "register" && window.page !== "home"){
+    if (window.page !== "login" && window.page !== "register" && window.page !== "home") {
         let heatAlert = document.getElementById("alert-heat").innerHTML;
         window.alertHeatTemplate = Handlebars.compile(heatAlert);
         let matchesAlert = document.getElementById("alert-matches").innerHTML;
@@ -45,7 +45,7 @@ function getNotifications() {
 
                 //If you have new heats generate alert
                 if (debug || data.newheats > 0) {
-                    $('#allalerts').prepend(window.alertHeatTemplate({"newmatches" : data.newheats}));
+                    $('#allalerts').prepend(window.alertHeatTemplate({ "newmatches": data.newheats }));
                     //console.log("You have new heats!");
                 }
 
@@ -166,6 +166,7 @@ function initProfile() {
         data: "json",
         success: (data, status) => {
             if (status) {
+                console.log(data);
                 $('#tFirstName').text(data.firstname);
                 $('#tLastName').text(data.lastname);
                 $('#first_name')[0].value = data.firstname;
@@ -225,6 +226,7 @@ function initProfile() {
         const update = {
             first_name: form.first_name,
             last_name: form.last_name,
+            username: form.email,
             email: form.email,
             gender: $('#gender').find(":selected").val(),
             description: form.description,
@@ -232,9 +234,26 @@ function initProfile() {
             dob: form.dob,
             adjectives: form.adjective1.replace(/ /g, '') + "," + form.adjective2.replace(/ /g, '') + "," + form.adjective3.replace(/ /g, ''),
             hobbies: updateHobbies,
+            pw: false
             // image: $('#profile-picture').attr("src")
         }
-        //console.log(update);
+
+        if (update.email == undefined || update.email == "") {
+            handleUpdateErrors(undefined, { email: ["This field is required."] }, undefined);
+            return;
+        }
+        if (update.first_name == undefined || update.first_name == "") {
+            handleUpdateErrors(undefined, { first_name: ["This field is required."] }, undefined);
+            return;
+        }
+
+        if (form.new_password1 != "" || form.new_password2 != "" || form.old_password != "") {
+            update.pw = true;
+            update.old_password = form.old_password;
+            update.new_password1 = form.new_password1;
+            update.new_password2 = form.new_password2;
+        }
+
         $.ajax({
             url: url,
             type: "PUT",
@@ -243,13 +262,77 @@ function initProfile() {
             dataType: "json",
             success: (data, status) => {
                 if (status) {
-                    // console.log(data)
-                    $('#tFirstName').text(update.first_name);
-                    $('#tLastName').text(update.last_name);
+                    console.log(data)
+                    handleUpdateErrors(data.errors_profile, data.errors_user, data.errors_pw);
+                    $('#tFirstName').text(form.first_name);
+                    $('#tLastName').text(form.last_name);
                 }
             }
         });
     });
+}
+
+function handleUpdateErrors(profile, user, pw) {
+    if (user != undefined && user.first_name) {
+        $('#first_name').addClass("is-invalid");
+        $('#errorFirstName').text(user.first_name[0]);
+    } else {
+        $('#first_name').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (user != undefined && user.last_name) {
+        $('#last_name').addClass("is-invalid");
+        $('#errorLastName').text(user.last_name[0]);
+    } else {
+        $('#last_name').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (user != undefined && user.email) {
+        $('#email').addClass("is-invalid");
+        $('#errorEmail').text(user.email[0]);
+    } else {
+        $('#email').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (profile != undefined && profile.description) {
+        $('#description').addClass("is-invalid");
+        $('#errorDescription').text(profile.description[0]);
+    } else {
+        $('#description').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (profile != undefined && profile.location) {
+        $('#location').addClass("is-invalid");
+        $('#errorLocation').text(profile.location[0]);
+    } else {
+        $('#location').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (profile != undefined && profile.dob) {
+        $('#dob').addClass("is-invalid");
+        $('#errorDOB').text(profile.dob[0]);
+    } else {
+        $('#dob').removeClass("is-invalid").addClass("is-valid");
+    }
+    if (pw) {
+        if (pw.old_password != undefined) {
+            $('#old_password').addClass("is-invalid");
+            $('#errorOldPassword').text(pw.old_password[0]);
+        } else {
+            $('#old_password').removeClass("is-invalid").addClass("is-valid");
+        }
+        if (pw.new_password1 != undefined) {
+            $('#new_password1').addClass("is-invalid");
+            $('#errorPassword1').text(pw.new_password1[0]);
+        } else {
+            $('#new_password1').removeClass("is-invalid").addClass("is-valid");
+        }
+        if (pw.new_password2 != undefined) {
+            $('#new_password2').addClass("is-invalid");
+            $('#errorPassword2').text(pw.new_password2[0]);
+        } else {
+            $('#new_password2').removeClass("is-invalid").addClass("is-valid");
+        }
+    } else {
+        $('#old_password').removeClass("is-invalid");
+        $('#new_password1').removeClass("is-invalid");
+        $('#new_password2').removeClass("is-invalid");
+    }
 }
 
 function uploadProfileImage() {
@@ -323,7 +406,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
     let profiles = [];
     let url = ROOTURL + '/api/profiles/?json';
 
-   // console.log(minAge, maxAge, gender)
+    // console.log(minAge, maxAge, gender)
 
     if (minAge) {
         url = url + "&minAge=" + minAge;
@@ -391,12 +474,12 @@ function getProfiles(minAge, maxAge, gender, matches) {
         });
     }
 
-    function profileView(id){
+    function profileView(id) {
         //Using head because not all data needs to be returned
         console.log(id);
         $.ajax({
             url: ROOTURL + "/api/profile/" + id + "/",
-            type : 'HEAD',
+            type: 'HEAD',
             data: "json"
         });
     }

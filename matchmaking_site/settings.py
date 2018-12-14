@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
- 
+
 import os
-import django_heroku 
+# import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -129,11 +129,11 @@ LOGIN_REDIRECT_URL = 'matchmaker-home'
 LOGIN_URL = 'login'
 
 
-#Email Settings
+# Email Settings
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = "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"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

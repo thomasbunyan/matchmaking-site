@@ -53,12 +53,6 @@
                         <div id="errorLastName" class="invalid-feedback">Invalid last name</div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name" class="font-weight-bold">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" autocomplete="email"
-                            placeholder="e.g. johnsmith@email.com" maxlength="60">
-                        <div id="errorEmail" class="invalid-feedback">Invalid email</div>
-                    </div>
-                    <div class="form-group">
                         <label for="gender" class="font-weight-bold">Gender:</label>
                         <select id="gender">
                             <option value="M">Male</option>
@@ -111,6 +105,32 @@
                                 style="width:32%" placeholder="e.g. Ambitious" maxlength="15">
                         </div>
                         <div id="errorLocation" class="invalid-feedback">Invalid location</div>
+                    </div>
+                    <h3 class="pt-4 my-4 text-center">Account Info</h3>
+                    <div class="form-group">
+                        <label for="email" class="font-weight-bold">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" autocomplete="email"
+                            placeholder="e.g. johnsmith@email.com" maxlength="60">
+                        <div id="errorEmail" class="invalid-feedback">Invalid email</div>
+                    </div>
+                    <h5 class="pt-4 mt-4 text-center">Update password</h5>
+                    <div class="form-group">
+                        <label for="old_password" class="font-weight-bold">Old password:</label>
+                        <input type="password" name="old_password" id="old_password" class="form-control" autocomplete="none"
+                            placeholder="Your password" maxlength="60">
+                        <div id="errorOldPassword" class="invalid-feedback">Invalid old password</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password1" class="font-weight-bold">New password:</label>
+                        <input type="password" name="new_password1" id="new_password1" class="form-control"
+                            autocomplete="none" placeholder="e.g. sdfkj5WSD3fgk234" maxlength="60">
+                        <div id="errorPassword1" class="invalid-feedback">Invalid password1</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password2" class="font-weight-bold">Repeat new password:</label>
+                        <input type="password" name="new_password2" id="new_password2" class="form-control"
+                            autocomplete="none" placeholder="Same as above password" maxlength="60">
+                        <div id="errorPassword2" class="invalid-feedback">Invalid password2</div>
                     </div>
                 </form>
             </fieldset>

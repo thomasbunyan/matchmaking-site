@@ -7,12 +7,14 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProfileUpdateCreate
+from django.contrib.auth.forms import PasswordChangeForm
 from .models import User, Profile, Hobby
 
 from datetime import date
 from django.utils.timezone import now
 
 import json
+
 
 @login_required
 def profile(request):
@@ -59,9 +61,7 @@ def apiLogin(request):
 def apiProfile(request, userid=None):
     try:
 
-        
-        
-        # Uploading profile pics required a seprate HTTP endpoint, due to file encoding. 
+        # Uploading profile pics required a seprate HTTP endpoint, due to file encoding.
         if request.method == "POST":
             profile = User.objects.get(id=request.user.id).profile
             image = request.FILES['file-0']
@@ -78,7 +78,7 @@ def apiProfile(request, userid=None):
                 # Save user changes
                 profile.save()
 
-        # Get Individual Profiles or Current profile    
+        # Get Individual Profiles or Current profile
         if request.method == "GET":
             if userid:
                 profile = User.objects.get(id=userid).profile
@@ -114,22 +114,29 @@ def apiProfile(request, userid=None):
 
         # Update your profile
         if request.method == "PUT":
-            request.PUT = QueryDict(request.body)  
+            request.PUT = QueryDict(request.body)
             hobbyPks = request.PUT.getlist('hobbies[]')
             hobbies = Hobby.objects.filter(pk__in=hobbyPks)
-
-            print(request.FILES)
 
             u_form = UserUpdateForm(request.PUT, instance=request.user)
             p_form = ProfileUpdateForm(
             request.PUT, request.FILES, instance=request.user.profile)
-            if u_form.is_valid() and p_form.is_valid():
+            
+            if request.PUT['pw'] == 'true':
+                pw_form = PasswordChangeForm(request.user, request.PUT)
+
+            if u_form.is_valid() and p_form.is_valid() and (request.PUT['pw'] == 'false' or pw_form.is_valid()):
                 u_form.save()
                 p_form.save()
+                if request.PUT['pw'] != 'false':
+                    pw_form.save()
                 request.user.profile.hobbies.set(hobbies)
                 return JsonResponse({"success": True, "redirect": "profile/"})
             else:
-                return JsonResponse({"success": False})
+                if(request.PUT['pw'] == 'false'):
+                    return JsonResponse({"success": False, "errors_user": u_form.errors, "errors_profile": p_form.errors})
+                else:
+                    return JsonResponse({"success": False, "errors_user": u_form.errors, "errors_profile": p_form.errors, "errors_pw": pw_form.errors})
         else:
             return JsonResponse({"success": False})
     except:
@@ -156,7 +163,7 @@ def apiProfiles(request):
             minAge = int(minAge)
             min_date = date(current.year - minAge, current.month, current.day)
             res = res.filter(dob__lte=min_date)
-            
+
 
         if maxAge:
             maxAge = int(maxAge)
@@ -165,10 +172,10 @@ def apiProfiles(request):
 
         if gender:
             if gender == "M":
-                res = res.filter(gender = 'M')
+                res = res.filter(gender='M')
             else:
-                res = res.filter(gender = 'F')
-            
+                res = res.filter(gender='F')
+
         # Manually Making Json File
         # res = serializers.serialize('json', res)
 
@@ -176,13 +183,13 @@ def apiProfiles(request):
         favorited = []
         for profile in request.user.profile.heat.all():
             favorited.append(profile.id)
-        
+
         userhobbies = []
         for hobby in request.user.profile.hobbies.all():
             userhobbies.append(hobby.name)
- 
+
         jsonData = []
-        
+
         for profile in res:
 
             # Temp fix for dates
@@ -190,17 +197,16 @@ def apiProfiles(request):
             #     dob = profile.dob.strftime('%Y-%m-%d')
             # else:
             #     dob = "N/A"
-
-            jsonProduct = { 'id' : profile.user.id,
+            jsonProduct = {'id': profile.user.id,
                             'image': '/media/' + str(profile.image),
                             'firstname': profile.user.first_name,
-                            'lastname' : profile.user.last_name,
-                            'dob' : profile.dob.strftime('%Y-%m-%d'),
-                            'gender' : profile.gender,
+                            'lastname': profile.user.last_name,
+                            'dob': profile.dob.strftime('%Y-%m-%d'),
+                            'gender': profile.gender,
                             'location': profile.location,
-                            'description' : profile.description,
-                            'adjectives' : profile.adjectives,
-                            'views' : str(profile.views),             
+                            'description': profile.description,
+                            'adjectives': profile.adjectives,
+                            'views': str(profile.views)
             }
 
             hobbies = []
@@ -209,7 +215,7 @@ def apiProfiles(request):
                 hobbies.append(hobby.name)
                 if(hobby.name in userhobbies):
                     chobbies = chobbies + 1
-            
+
             jsonProduct['hobbies'] = hobbies
             jsonProduct['commonhobbies'] = chobbies
 
@@ -219,11 +225,12 @@ def apiProfiles(request):
                 jsonProduct['heat'] = False
 
             jsonData.append(jsonProduct)
-            
+
         # return JsonResponse(jsonData, safe=False)
 
         # Sort the json data by common hobbies
-        jsonData = sorted(jsonData, key=lambda k: k['commonhobbies'], reverse=True)
+        jsonData = sorted(
+            jsonData, key=lambda k: k['commonhobbies'], reverse=True)
         jsonData = json.dumps(jsonData)
         return HttpResponse(jsonData, content_type="application/json")
 
@@ -250,7 +257,7 @@ def apiRegister(request):
     if request.method == "POST":
         uform = UserRegisterForm(request.POST)
         pform = ProfileUpdateCreate(request.POST)
-        
+
         if uform.is_valid() and pform.is_valid():
             uform.save()
             user = uform.instance
@@ -270,8 +277,8 @@ def apiRegister(request):
             fromemail = 'no-reply@neshanthan.com'
 
             context = {
-                'firstName' : firstName,
-                'lastName' : lastName
+                'firstName': firstName,
+                'lastName': lastName
             }
 
             # Send Email to user when new heat recieved
@@ -304,7 +311,7 @@ def apiNotifications(request):
     profile.save()
 
     return JsonResponse({"newheats": newHeats, "newmatches": newMatches})
-    
+
 
 
 
@@ -316,11 +323,11 @@ def apiProfileIDHeat(request):
             username = request.POST['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
-            
+
             # If the user being liked likes the person liking him then add new match notification on both
             if request.user.profile in profile.heat.all():
                 request.user.profile.newMatches += 1
-                profile.newMatches += 1 
+                profile.newMatches += 1
 
             # Save Changes
             request.user.profile.save()
@@ -334,8 +341,8 @@ def apiProfileIDHeat(request):
             fromemail = 'no-reply@neshanthan.com'
 
             context = {
-                'firstName' : firstName,
-                'lastName' : lastName
+                'firstName': firstName,
+                'lastName': lastName
             }
 
             # Send Email to user when new heat recieved
@@ -360,7 +367,7 @@ def apiProfileIDHeat(request):
 
             # take away 1 from prevHeat so you will get notfication on new heats
             profile.prevHeat = profile.prevHeat-1
-            profile.save() 
+            profile.save()
 
             return JsonResponse({"success": True})
         else:

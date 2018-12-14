@@ -2,24 +2,29 @@
 const ROOTURL = window.location.protocol + "//" + window.location.host;
 
 //Make Global for template files to so only compiled once
-$(document).ready(function() {
-    let profiles = document.getElementById("profiles-template").innerHTML;
-    window.pstemplate = Handlebars.compile(profiles);
-    let heatAlert = document.getElementById("alert-heat").innerHTML;
-    window.alertHeatTemplate = Handlebars.compile(heatAlert);
-    let matchesAlert = document.getElementById("alert-matches").innerHTML;
-    window.alertMatchesTemplate = Handlebars.compile(matchesAlert);
+$(() => {
+    window.page = window.location.href.split("/")[3];
+    if(window.page === "discover" || window.page === "mymatches"){
+        let profiles = document.getElementById("profiles-template").innerHTML;
+        window.pstemplate = Handlebars.compile(profiles);
+    }
+    //Alerts will be on all logged in pages
+    if(window.page !== "login" && window.page !== "register" && window.page !== "home"){
+        let heatAlert = document.getElementById("alert-heat").innerHTML;
+        window.alertHeatTemplate = Handlebars.compile(heatAlert);
+        let matchesAlert = document.getElementById("alert-matches").innerHTML;
+        window.alertMatchesTemplate = Handlebars.compile(matchesAlert);
+    }
 });
 
 
 $(() => {
-    const page = window.location.href.split("/")[3];
-    if (page === "") { initHome(); }
-    else if (page === "login") { initLogin(); }
-    else if (page === "register") { initRegister(); }
-    else if (page === "profile") { initProfile(); getNotifications(); }
-    else if (page === "discover") { initDiscover(); initSearch(); getNotifications(); }
-    else if (page === "mymatches") { initMatches(); initSearch(); getNotifications(); }
+    if (window.page === "") { initHome(); }
+    else if (window.page === "login") { initLogin(); }
+    else if (window.page === "register") { initRegister(); }
+    else if (window.page === "profile") { initProfile(); getNotifications(); }
+    else if (window.page === "discover") { initDiscover(); initSearch(); getNotifications(); }
+    else if (window.page === "mymatches") { initMatches(); initSearch(); getNotifications(); }
 
 });
 
@@ -62,7 +67,7 @@ function getNotifications() {
 
 function initHome() {
     // Home js.
-    console.log("Home");
+    //console.log("Home");
 }
 
 function initLogin() {
@@ -95,7 +100,7 @@ function initLogin() {
                             window.location.replace(ROOTURL + "/" + data.redirect);
                         }
                     } else {
-                        console.log("bad login")
+                        $('#allalerts').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert"> The username or password is <strong> incorrect!</strong> Please try again. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>');
                     }
                 } else {
                     console.log("Unable to POST");
@@ -150,7 +155,7 @@ function initRegister() {
 
 function initProfile() {
     // Profile js.
-    console.log("Profile");
+    //console.log("Profile");
     var hobbies = [];
     var allHobbies = [];
     const url = ROOTURL + '/api/profile/';
@@ -229,7 +234,7 @@ function initProfile() {
             hobbies: updateHobbies,
             // image: $('#profile-picture').attr("src")
         }
-        console.log(update);
+        //console.log(update);
         $.ajax({
             url: url,
             type: "PUT",
@@ -289,17 +294,8 @@ function addHobbyButtonListeners(hobbies) {
 }
 
 function initSearch() {
-    console.log("Search");
     $('#filterButton').click(() => {
-        console.log("Hello World");
         let form = getFormData($("#search"));
-
-        // Validate frontend here.
-        let valid = true;
-        if (!valid) {
-            console.log("Not valid");
-            return;
-        }
 
         //console.log(form.minAge, form.maxAge, form.gender)
         const page = window.location.href.split("/")[3];
@@ -321,13 +317,13 @@ function initDiscover(minAge, maxAge, gender) {
 
 function getProfiles(minAge, maxAge, gender, matches) {
 
-    console.log("get Profiles");
+    //console.log("get Profiles");
     const date = new Date();
     const csrf = getCookie("csrftoken");
     let profiles = [];
     let url = ROOTURL + '/api/profiles/?json';
 
-    console.log(minAge, maxAge, gender)
+   // console.log(minAge, maxAge, gender)
 
     if (minAge) {
         url = url + "&minAge=" + minAge;
@@ -409,7 +405,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
 
     function addHeat(e) {
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
-        console.log("Make profile", id, "hot.");
+        //console.log("Make profile", id, "hot.");
         let form = {};
         form.username = id;
         form.csrfmiddlewaretoken = getCookie("csrftoken");
@@ -421,7 +417,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
             dataType: "json",
             success: (data, status) => {
                 if (status) {
-                    console.log("made hot")
+                    //console.log("made hot")
                 }
             }
         });
@@ -429,7 +425,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
 
     function removeHeat(e) {
         const id = $(e.currentTarget).closest('.profile-card').attr('id');
-        console.log("Delete", id, "Heat.");
+        //console.log("Delete", id, "Heat.");
         let form = {};
         form.username = id;
         form.csrfmiddlewaretoken = getCookie("csrftoken");
@@ -444,7 +440,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
             dataType: "json",
             success: (data, status) => {
                 if (status) {
-                    console.log("Delete heat")
+                    //console.log("Delete heat")
                 }
             }
         });

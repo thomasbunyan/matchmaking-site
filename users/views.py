@@ -377,6 +377,9 @@ def apiProfileIDHeat(request):
 
             # take away 1 from prevHeat so you will get notfication on new heats
             profile.prevHeat = profile.prevHeat-1
+            if profile.prevHeat < 0:
+                profile.prevHeat = 0
+            
             profile.save()
 
             return JsonResponse({"success": True})

@@ -115,7 +115,7 @@
         dob: 1995-01-30
         adjectives: self-centred, traveller, book reader, sporty guy, outgoing
         views: 0
-        prevHeat: -1
+        prevHeat: 0
         newMatches: 0
         hobbies:
         - [Watching movies]
@@ -136,7 +136,7 @@
         dob: 1990-05-30
         adjectives: Bookworm, learner, chef, playing the guitar
         views: 1
-        prevHeat: -1
+        prevHeat: 0
         newMatches: 0
         hobbies:
         - [Watching movies]
@@ -157,7 +157,7 @@
         dob: 1960-01-30
         adjectives: Cat lovers, outdoor guy
         views: 1
-        prevHeat: -1
+        prevHeat: 0
         newMatches: 1
         hobbies:
         - [Watching movies]
@@ -379,7 +379,7 @@
         dob: 1970-01-30
         adjectives: Food eater, caring, full of energy
         views: 0
-        prevHeat: -1
+        prevHeat: 0
         newMatches: 0
         hobbies:
         - [Drinking]
@@ -508,7 +508,7 @@
         dob: 2000-01-30
         adjectives: Friendly, Fits, stay healthy
         views: 0
-        prevHeat: -2
+        prevHeat: 0
         newMatches: 0
         hobbies:
         - [Drinking]

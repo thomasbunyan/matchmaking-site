@@ -17,10 +17,24 @@
         password: pbkdf2_sha256$120000$GQuavLSSvDN7$lGyoeQ/ry4HviY072Sqi/BXx6xqk8SjnLSmmJj4dazY=
         last_login: 2018-12-13 20:15:04.883824+00:00
         is_superuser: true
-        username: neshanthan
+        username: neshanthan.a@gmail.com
         first_name: Neshanthan
         last_name: Annalingam
         email: neshanthan.a@gmail.com
+        is_staff: true
+        is_active: true
+        date_joined: 2018-11-15 15:56:16.623459+00:00
+        groups: []
+        user_permissions: []
+-   model: auth.user
+    fields:
+        password: pbkdf2_sha256$120000$GQuavLSSvDN7$lGyoeQ/ry4HviY072Sqi/BXx6xqk8SjnLSmmJj4dazY=
+        last_login: 2018-12-13 20:15:04.883824+00:00
+        is_superuser: true
+        username: sherise97@gmail.com
+        first_name: SinYee
+        last_name: Lam
+        email: sherise97@gmail.com
         is_staff: true
         is_active: true
         date_joined: 2018-11-15 15:56:16.623459+00:00

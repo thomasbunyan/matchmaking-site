@@ -323,36 +323,46 @@ def apiProfileIDHeat(request):
             username = request.POST['username']
             profile = Profile.objects.get(user=username)
             request.user.profile.heat.add(profile)
-
-            # If the user being liked likes the person liking him then add new match notification on both
-            if request.user.profile in profile.heat.all():
-                request.user.profile.newMatches += 1
-                profile.newMatches += 1
-
-            # Save Changes
-            request.user.profile.save()
-            profile.save()
-
+            
             # Email Details
             firstName = profile.user.first_name
             lastName = profile.user.last_name
             email = profile.user.email
-            subject = 'Someone has given you some heat!'
             fromemail = 'no-reply@neshanthan.com'
 
             context = {
                 'firstName': firstName,
                 'lastName': lastName
             }
+            
+            # If the user being liked likes the person liking him then add new match notification on both
+            if request.user.profile in profile.heat.all():
+                request.user.profile.newMatches += 1
+                profile.newMatches += 1 
 
-            # Send Email to user when new heat recieved
-            send_mail(
-                subject,
-                render_to_string('emails/newheat.txt', context),
-                fromemail,
-                [email],
-                fail_silently=False,
-            )
+                # Save Changes
+                request.user.profile.save()
+                profile.save()
+
+                #Send email saying new match has been made to other user
+                subject = 'You have matched with someone!'
+                send_mail(
+                    subject,
+                    render_to_string('emails/matches.txt', context),
+                    fromemail,
+                    [email],
+                    fail_silently=False,
+                )
+            else:
+            #Send new email to other user for new heat recieved
+                subject = 'Someone has given you some heat!'
+                send_mail(
+                    subject,
+                    render_to_string('emails/newheat.txt', context),
+                    fromemail,
+                    [email],
+                    fail_silently=False,
+                )
 
             return JsonResponse({"success": True})
         else:

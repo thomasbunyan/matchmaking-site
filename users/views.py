@@ -14,7 +14,6 @@ from django.utils.timezone import now
 
 import json
 
-
 @login_required
 def profile(request):
 
@@ -31,8 +30,6 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    # Just increasing view counter on viewing profile here, need to do it for ajax as well
-    request.user.profile.views = request.user.profile.views+1
     request.user.save()
 
     context = {
@@ -61,6 +58,8 @@ def apiLogin(request):
 @login_required
 def apiProfile(request, userid=None):
     try:
+
+        
         
         # Uploading profile pics required a seprate HTTP endpoint, due to file encoding. 
         if request.method == "POST":
@@ -69,6 +68,15 @@ def apiProfile(request, userid=None):
             profile.image = image
             profile.save()
             return JsonResponse({"success": True})
+
+        # Checks if profile exists increase view
+        if request.method == "HEAD":
+            if userid:
+                profile = User.objects.get(id=userid).profile
+                # Increase counter every time you make call to get individual profile if not user
+                profile.views = profile.views+1
+                # Save user changes
+                profile.save()
 
         # Get Individual Profiles or Current profile    
         if request.method == "GET":
@@ -100,11 +108,6 @@ def apiProfile(request, userid=None):
             }
 
             jsonProduct['hobbies'] = hobbies
-
-            # !!!!!!!!!!!!!! newHeats doesn't exist.!!!!!!!!!!!!!!!!
-            # Use newheats to notify user within app of new heat alerts
-            # if newHeats != None:
-            #     jsonProduct['newheats'] = newHeats
 
             jsonData = json.dumps(jsonProduct)
             return HttpResponse(jsonData, content_type="application/json")

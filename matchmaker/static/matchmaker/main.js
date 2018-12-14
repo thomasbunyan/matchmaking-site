@@ -352,12 +352,11 @@ function getProfiles(minAge, maxAge, gender, matches) {
         success: (data, status) => {
             if (status) {
 
-                
-
                 document.getElementById("profile-block").innerHTML = window.pstemplate(data);
 
                 $('.profile-card').click((e) => {
                     const id = e.currentTarget.id + "Modal"
+                    profileView(e.currentTarget.id)
                     $('#' + id).modal();
                 });
 
@@ -370,6 +369,7 @@ function getProfiles(minAge, maxAge, gender, matches) {
     // Click on profile to view the modal.
     $('.profile-card').click((e) => {
         const id = e.currentTarget.id + "Modal"
+        profileView(e.currentTarget.id)
         $('#' + id).modal();
     });
 
@@ -393,13 +393,12 @@ function getProfiles(minAge, maxAge, gender, matches) {
 
     function profileView(id){
         //Using head because not all data needs to be returned
+        console.log(id);
         $.ajax({
             url: ROOTURL + "/api/profile/" + id + "/",
-            type: "GET",
-            data: "json",
+            type : 'HEAD',
+            data: "json"
         });
-
-
     }
 
 

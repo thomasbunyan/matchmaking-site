@@ -21,15 +21,15 @@ class Command(BaseCommand):
         usersfilepath = os.path.join(mainpath, 'users.yaml')
 
         #Reset All data
-        Print("Resetting All Data")
+        print("Resetting All Data")
         management.call_command('flush', verbosity=0, interactive=False)
 
         #Create the users
-        Print("Creating all user accounts")
+        print("Creating all user accounts")
         management.call_command('loaddata', usersfilepath, verbosity=0)
 
         #Create the hobbies
-        Print("Creating all hobbies")
+        print("Creating all hobbies")
         management.call_command('loaddata', hobbiesfilepath, verbosity=0)
 
         #Load up the hobbies

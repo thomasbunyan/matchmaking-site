@@ -53,7 +53,7 @@ class Profile(models.Model):
     objects = ProfileTypeManager()
 
     def natural_key(self):
-        return (self.user.natural_key(),)
+        return (self.user.natural_key())
     natural_key.dependencies = ['auth.User', 'users.Hobby']
 
     def __str__(self):

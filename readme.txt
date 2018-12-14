@@ -12,6 +12,8 @@ heroku run python manage.py reset_db --router=default
 //Alternative Drop
 heroku run python manage.py flush 
 
-
+from users.models import *
 
 from django.contrib.auth.models import User
+
+User.objects.get_by_natural_key('importtest@tmail1.com')

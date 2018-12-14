@@ -1,0 +1,29 @@
+-   model: users.hobby
+    fields:
+        name: Football
+        description: "#1 sport in the world"
+-   model: users.hobby
+    fields:
+        name: Drinking
+        description: "For a real connoisseur"
+-   model: users.hobby
+    fields:
+        name: Drawing
+        description: "Art stuff"
+-   model: users.hobby
+    fields:
+        name: Programming
+        description: "Coding is Fun!"
+-   model: users.hobby
+    fields:
+        name: Exploring
+        description: "Explore outdoor and go for an adventure."
+-   model: users.hobby
+    fields:
+        name: Baking
+        description: "Good way to relax"
+-   model: users.hobby
+    fields:
+        name: Watching movies
+        description: "Cinema fanatic!"
+

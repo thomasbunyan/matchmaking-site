@@ -1,7 +1,7 @@
 -   model: users.profile
     fields:
         user: [admin]
-        image: profile_pics/Basic_Use_Case_Diagram_IjX1X91.png
+        image: profile_pics/t1.jpg
         gender: M
         description: This block of text goes on and on and does not have any visual
             separation between what would normally make up a new paragraph. Instead,
@@ -44,8 +44,8 @@
         - [gimmyHC@kmail.com]
 -   model: users.profile
     fields:
-        user: [neshanthan]
-        image: profile_pics/profilepic.jpg
+        user: [neshanthan.a@gmail.com]
+        image: profile_pics/vijay.jpg
         gender: M
         description: Nothing Much!
         location: Norway
@@ -60,6 +60,28 @@
         heat:
         - [admin]
         - [n.GOLD@email.com]
+        - [welbeck.d97@email.com]
+        - [tou.dan1987@neshanthan.com]
+        - [cc_sweetnTasty@email.com]
+        - [ticktalk@email.com]
+        - [anny_k@neshanthan.com]
+-   model: users.profile
+    fields:
+        user: [sherise97@gmail.com]
+        image: profile_pics/t3.jpg
+        gender: F
+        description: Nothing Much!
+        location: Hong Kong
+        dob: 2000-01-30
+        adjectives: Friendly, food eater, Lazy girl
+        views: 110
+        prevHeat: 3
+        newMatches: 0
+        hobbies:
+        - [Watching movies]
+        heat:
+        - [admin]
+        - [neshanthan.a@gmail.com]
         - [welbeck.d97@email.com]
         - [tou.dan1987@neshanthan.com]
         - [cc_sweetnTasty@email.com]
@@ -502,7 +524,7 @@
         hobbies:
         - [Football]
         heat:
-        - [neshanthan]
+        - [neshanthan.a@gmail.com]
 -   model: users.profile
     fields:
         user: [hanachan@japmail.com]
@@ -549,28 +571,7 @@
         hobbies:
         - [Drinking]
         heat:
-        - [neshanthan]
--   model: users.profile
-    fields:
-        user: [neshanthan]
-        image: profile_pics/profilepic.jpg
-        gender: M
-        description: Nothing Much!
-        location: Norway
-        dob: 2000-01-30
-        adjectives: Computer Scientist
-        views: 109
-        prevHeat: 3
-        newMatches: 0
-        hobbies:
-        - [Football]
-        - [Baking]
-        - [Drinking]
-        heat:
-        - [admin]
-        - [n.GOLD@email.com]
-        - [ticktalk@email.com]
-        - [anny_k@neshanthan.com]
+        - [neshanthan.a@gmail.com]
 -   model: users.profile
     fields:
         user: [nosy_mall@hotmail.com]
@@ -619,7 +620,7 @@
         - [Drawing]
         - [Programming]
         heat:
-        - [neshanthan]
+        - [neshanthan.a@gmail.com]
 -   model: users.profile
     fields:
         user: [tedthai@neshanthan.com]

@@ -9,8 +9,8 @@ import json
 
 
 class Command(BaseCommand):
-    args = '<foo bar ...>'
-    help = 'our help string comes here'
+    args = 'No Arguments Accepted right now'
+    help = 'Use this to reset the database users'
 
     def _create_data(self):
         mainpath = os.path.join(sys.path[0], 'fixtures')
@@ -35,6 +35,7 @@ class Command(BaseCommand):
             hobby = Hobby.objects.get_by_natural_key(hobbyname)
             allHobbies[hobbyname] = hobby
 
+        #Add the new profile data
         for profile in profiles:
             if profile["model"] == "users.profile":
                 usernk = profile["fields"]["user"][0]
